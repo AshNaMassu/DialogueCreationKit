@@ -3,9 +3,9 @@
 @using Blazor.Diagrams.Core
 @using Blazor.Diagrams.Core.Geometry
 @using Blazor.Diagrams.Core.Models
-@using DialogueCreationKit.Nodes;
+@using DialogueCreationKit.Nodes
 
-<div style="background-color: #00000020; width=100vw; height: 100vh">
+<div style="background-color: #00000020; width:100vw; height: 100vh">
     <CascadingValue Value="Diagram">
         <DiagramCanvas></DiagramCanvas>
     </CascadingValue>
@@ -41,8 +41,8 @@
 
     private void Setup()
     {
-        var node1 = NewNode(50, 50);
-        var node2 = NewNode(300, 300);
+        var node1 = NewTwoNumbersNode(50, 50);
+        var node2 = NewTwoNumbersNode(300, 300);
         var node3 = NewNode(300, 50);
 
         Diagram.Nodes.Add(new[] { node1, node2, node3 });
@@ -50,11 +50,23 @@
         Diagram.Links.Add(new LinkModel(node1.GetPort(PortAlignment.Right), node2.GetPort(PortAlignment.Left)));
     }
 
-    private static AddTwoNumbersNode NewNode(double x, double y)
+    private static AddTwoNumbersNode NewTwoNumbersNode(double x, double y)
     {
         var node = new AddTwoNumbersNode(new Point(x, y));
         node.AddPort(PortAlignment.Left);
         node.AddPort(PortAlignment.Right);
+        node.AddPort(PortAlignment.Top);
+        node.AddPort(PortAlignment.Bottom);
+        return node;
+    }
+
+    private static NodeModel NewNode(double x, double y)
+    {
+        var node = new NodeModel(new Point(x, y));
+        node.AddPort(PortAlignment.Left);
+        node.AddPort(PortAlignment.Right);
+        node.AddPort(PortAlignment.Top);
+        node.AddPort(PortAlignment.Bottom);
         return node;
     }
 }
