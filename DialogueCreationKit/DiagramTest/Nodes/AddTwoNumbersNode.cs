@@ -1,7 +1,7 @@
 ﻿using Blazor.Diagrams.Core.Geometry;
 using Blazor.Diagrams.Core.Models;
 
-namespace DialogueCreationKit.Nodes
+namespace DialogueCreationKit.DiagramTest.Nodes
 {
     public class AddTwoNumbersNode : NodeModel
     {
