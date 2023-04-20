@@ -51,7 +51,7 @@ namespace DialogueCreationKit.Designer.Components
         {
             var column = new Column
             {
-                Name = "Column",
+                Name = "DialogueMessage",
                 Type = ColumnType.String
             };
 
