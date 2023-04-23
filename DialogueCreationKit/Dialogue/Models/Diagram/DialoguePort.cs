@@ -1,12 +1,13 @@
 ﻿using Blazor.Diagrams.Core.Geometry;
 using Blazor.Diagrams.Core.Models;
+using DialogueCreationKit.Dialogue.Models.Enums;
 using Newtonsoft.Json;
 
-namespace DialogueCreationKit.Dialogue.Models
+namespace DialogueCreationKit.Dialogue.Models.Diagram
 {
-    public class DialogueNodePort : PortModel
+    public class DialoguePort : PortModel
     {
-        public DialogueNodePort(NodeModel parent, DialogueMessage dialogueMessage, PortAlignment alignment = PortAlignment.Bottom)
+        public DialoguePort(NodeModel parent, DialogueMessage dialogueMessage, PortAlignment alignment = PortAlignment.Bottom)
             : base(parent, alignment, null, null)
         {
             DialogueMessage = dialogueMessage;
@@ -21,18 +22,18 @@ namespace DialogueCreationKit.Dialogue.Models
             if (!base.CanAttachTo(port))
                 return false;
 
-            var targetPort = port as DialogueNodePort;
+            var targetPort = port as DialoguePort;
             var targetDialogueMessage = targetPort.DialogueMessage;
 
-            if (DialogueMessage.Type != targetDialogueMessage.Type)
+            if (targetDialogueMessage.Stage == DialogueStage.Begin)
                 return false;
 
-            if (DialogueMessage.Primary && targetDialogueMessage.Primary)
+            if (!DialogueMessage.Id.Equals(targetDialogueMessage.Id))
                 return false;
 
-            if (DialogueMessage.Primary && targetPort.Links.Count > 0 ||
-                targetDialogueMessage.Primary && Links.Count > 1) // Ongoing link
-                return false;
+            //if (DialogueMessage.Primary && targetPort.Links.Count > 0 ||
+            //    targetDialogueMessage.Primary && Links.Count > 1) // Ongoing link
+            //    return false;
 
             return true;
         }

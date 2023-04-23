@@ -28,7 +28,7 @@ namespace DialogueCreationKit.Designer.Models
             AddPort(Columns[1], PortAlignment.Left);
         }
 
-        public string Name { get; set; } = "DialogueNodeModel";
+        public string Name { get; set; } = "DialogueBase";
         public List<Column> Columns { get; }
         public bool HasPrimaryColumn => Columns.Any(c => c.Primary);
 
