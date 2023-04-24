@@ -1,0 +1,63 @@
+﻿@using Blazor.Diagrams.Components.Renderers
+@using DialogueCreationKit.Dialogue.Models.Diagram
+@using DialogueCreationKit.Dialogue.Models
+@using DialogueCreationKit.Dialogue.Models.Enums
+
+<li class="list-group-item">
+    @if (DialogueMessage.Stage != DialogueStage.Begin && DialogueNode.GetPort(DialogueMessage) != null)
+    {
+        <PortRenderer Port="DialogueNode.GetPort(DialogueMessage)"></PortRenderer>
+    }
+
+    @if (HasLinks)
+    {
+        <i class="fas fa-key mr-2 text-secondary"></i>
+    }
+
+    @*<span class="text-primary @(true || HasLinks ? "" : "ml-4")">@DialogueMessage.Stage.ToString()</span>*@
+    
+    @DialogueMessage.Id
+
+    @if (DialogueMessage.Stage != DialogueStage.End && DialogueNode.GetPort(DialogueMessage) != null)
+    {
+        <PortRenderer Port="DialogueNode.GetPort(PortAlignment.Right)"></PortRenderer>
+    }
+</li>
+
+@code {
+    private bool _shouldRender = true;
+
+    [Parameter]
+    public DialogueNodeModel DialogueNode { get; set; }
+
+    [Parameter]
+    public DialogueMessageView DialogueMessage { get; set; }
+
+    public bool HasLinks => DialogueNode.GetPort(DialogueMessage)?.Links.Count > 0;
+
+    public void Dispose()
+    {
+        DialogueMessage.Changed -= ReRender;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        DialogueMessage.Changed += ReRender;
+    }
+
+    protected override bool ShouldRender() => _shouldRender;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        _shouldRender = false;
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void ReRender()
+    {
+        _shouldRender = true;
+        StateHasChanged();
+    }
+}

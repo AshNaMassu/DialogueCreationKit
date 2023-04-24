@@ -10,7 +10,7 @@ namespace DialogueCreationKit.Dialogue.Models
         public DialogueStage Stage { get; set; }
         public bool IsActive { get;set; }
         public string MessageContent { get; set; }
-        public List<DialogueMessage> ChildsNodes { get; set; }
+        
 
         public DialogueMessage()
         {
@@ -18,7 +18,6 @@ namespace DialogueCreationKit.Dialogue.Models
             Stage = DialogueStage.None;
             IsActive = true;
             MessageContent = string.Empty;
-            ChildsNodes = new List<DialogueMessage>();
         }
     }
 

@@ -5,16 +5,16 @@ using Newtonsoft.Json;
 
 namespace DialogueCreationKit.Dialogue.Models.Diagram
 {
-    public class DialoguePort : PortModel
+    public class DialoguePortModel : PortModel
     {
-        public DialoguePort(NodeModel parent, DialogueMessage dialogueMessage, PortAlignment alignment = PortAlignment.Bottom)
+        public DialoguePortModel(NodeModel parent, DialogueMessageView dialogueMessage, PortAlignment alignment = PortAlignment.Bottom)
             : base(parent, alignment, null, null)
         {
             DialogueMessage = dialogueMessage;
         }
 
         [JsonIgnore]
-        public DialogueMessage DialogueMessage { get; }
+        public DialogueMessageView DialogueMessage { get; }
 
         public override bool CanAttachTo(PortModel port)
         {
@@ -22,13 +22,13 @@ namespace DialogueCreationKit.Dialogue.Models.Diagram
             if (!base.CanAttachTo(port))
                 return false;
 
-            var targetPort = port as DialoguePort;
+            var targetPort = port as DialoguePortModel;
             var targetDialogueMessage = targetPort.DialogueMessage;
 
             if (targetDialogueMessage.Stage == DialogueStage.Begin)
                 return false;
 
-            if (!DialogueMessage.Id.Equals(targetDialogueMessage.Id))
+            if (DialogueMessage.Id.Equals(targetDialogueMessage.Id))
                 return false;
 
             //if (DialogueMessage.Primary && targetPort.Links.Count > 0 ||
