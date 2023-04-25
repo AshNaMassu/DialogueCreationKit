@@ -14,12 +14,12 @@ namespace DialogueCreationKit.Dialogue.Models.Diagram
                 DialogueMessage = dialogueMessage;
 
             if (DialogueMessage.Stage != DialogueStage.Begin)
-                AddPort(DialogueMessage, PortAlignment.Left);
+                AddPort(new DialoguePortModel(this, DialogueMessage, PortAlignment.Left));
             
             if (DialogueMessage.Stage != DialogueStage.End && DialogueMessage.ChildsNodes != null)
             {
                 foreach (var child in DialogueMessage.ChildsNodes)
-                    AddPort(child, PortAlignment.Right);
+                    AddPort(new DialoguePortModel(this, child, PortAlignment.Right));
             }
                 
         }

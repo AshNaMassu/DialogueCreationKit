@@ -1,0 +1,37 @@
+﻿@page "/ports"
+
+@using Blazor.Diagrams.Core.Geometry;
+@using DialogueCreationKit.DiagramTest.Nodes;
+
+<div style="background-color: #00000020; width:100vw; height: 100vh">
+    <CascadingValue Value="_diagram">
+        <DiagramCanvas></DiagramCanvas>
+    </CascadingValue>
+</div>
+
+@code {
+    private readonly Diagram _diagram = new Diagram();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _diagram.Options.DefaultNodeComponent = typeof(ColoredNodeWidget);
+
+        var node1 = NewNode(50, 50);
+        var node2 = NewNode(300, 300);
+        _diagram.Nodes.Add(node1);
+        _diagram.Nodes.Add(node2);
+        _diagram.Nodes.Add(NewNode(500, 50));
+
+        _diagram.Links.Add(new LinkModel(node1.GetPort(PortAlignment.Top), node2.GetPort(PortAlignment.Top)));
+    }
+
+    private NodeModel NewNode(double x, double y)
+    {
+        var node = new NodeModel(new Point(x, y));
+        node.AddPort(new ColoredPort(node, PortAlignment.Top, true));
+        node.AddPort(new ColoredPort(node, PortAlignment.Left, false));
+        return node;
+    }
+}

@@ -1,19 +1,35 @@
 ﻿@using Blazor.Diagrams.Components.Renderers
 
-<div class="card @(Node.Selected ? "selected" : "")" style="width: 500px;">
-    <div class="card-header">
-        @*<h6 class="mb-0">@Node.DialogueMessage.Id</h6>*@
-        <ul class="list-group list-group-flush">
-            <DialoguePort @key="Node.DialogueMessage" DialogueMessage=@Node.DialogueMessage DialogueNode=@Node></DialoguePort>
-        </ul>
-    </div>
+<style>
+    .dialogue-node {
+        border: 2px solid black;
+        text-align: center;
+    }
+
+    .dialogue-node.selected {
+        border-color: blue;
+    }
+
+    .dialogue-node.port {
+        width: 48px;
+        height: 24px;
+        background-color: aqua;
+    }
+</style>
+
+<div class="dialogue-node @(Node.Selected ? "selected" : "")" style="width: 500px;">
     <div>
-        <h6 class="mb-0">@Node.DialogueMessage.MessageContent</h6>
+        <h6>Text node</h6>
     </div>
-    <ul class="list-group list-group-flush">
-        @foreach (var child in Node.DialogueMessage.ChildsNodes)
+
+    <DialoguePort Child=@Node.DialogueMessage Node=@Node></DialoguePort>
+
+    <h6>@Node.DialogueMessage.MessageContent</h6>
+    
+    <div>
+        @foreach(var child in Node.DialogueMessage.ChildsNodes)
         {
-            <DialoguePort @key="child"  DialogueMessage=@child DialogueNode=@Node></DialoguePort>
+            <DialoguePort Child="child" Node=@Node></DialoguePort>
         }
-    </ul>
+    </div>
 </div>

@@ -28,6 +28,9 @@ namespace DialogueCreationKit.Dialogue.Models.Diagram
             if (targetDialogueMessage.Stage == DialogueStage.Begin)
                 return false;
 
+            if (!targetDialogueMessage.Id.HasValue )
+                return false;
+
             if (DialogueMessage.Id.Equals(targetDialogueMessage.Id))
                 return false;
 

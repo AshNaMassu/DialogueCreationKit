@@ -3,41 +3,61 @@
 @using DialogueCreationKit.Dialogue.Models
 @using DialogueCreationKit.Dialogue.Models.Enums
 
-<li class="list-group-item">
-    @if (DialogueMessage.Stage != DialogueStage.Begin && DialogueNode.GetPort(DialogueMessage) != null)
-    {
-        <PortRenderer Port="DialogueNode.GetPort(PortAlignment.Left)"></PortRenderer>
-    }
+@if (Node != null && Node.DialogueMessage != null && Child != null)
+{
+        @if (Child.Stage != DialogueStage.Begin && Port?.Alignment == PortAlignment.Left)
+        {
+            <PortRenderer Port="Port" Class="port">
+               L
+            </PortRenderer>
+        }
 
-    @DialogueMessage.Id
+        @Child.Id
 
-    @if (DialogueMessage.Stage != DialogueStage.End && DialogueNode.GetPort(DialogueMessage) != null)
-    {
-        <PortRenderer Port="DialogueNode.GetPort(PortAlignment.Right)"></PortRenderer>
-    }
-</li>
+        @if (Node.DialogueMessage.Stage != DialogueStage.End && Port?.Alignment == PortAlignment.Right)
+        {
+            <PortRenderer Port="Port" Class="port">
+                R
+            </PortRenderer>
+        }
+}
 
 @code {
     private bool _shouldRender = true;
 
     [Parameter]
-    public DialogueNodeModel DialogueNode { get; set; }
+    public DialogueNodeModel Node { get; set; }
 
     [Parameter]
-    public DialogueMessageView DialogueMessage { get; set; }
+    public DialogueMessageView Child { get; set; }
 
-    public bool HasLinks => DialogueNode.GetPort(DialogueMessage)?.Links.Count > 0;
+    private DialoguePortModel _port;
+
+    public DialoguePortModel Port
+    {
+        get
+        {
+            if (_port == null)
+            {
+                _port = Node.GetPort(Child);
+            }
+
+            return _port;
+        }
+    }
+
+    //public bool HasLinks => DialogueNode.GetPort(DialogueMessage)?.Links.Count > 0;
 
     public void Dispose()
     {
-        DialogueMessage.Changed -= ReRender;
+       Child.Changed -= ReRender;
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        DialogueMessage.Changed += ReRender;
+        Child.Changed += ReRender;
     }
 
     protected override bool ShouldRender() => _shouldRender;

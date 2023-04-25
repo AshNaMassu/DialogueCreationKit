@@ -44,9 +44,9 @@ namespace DialogueCreationKit.Dialogue.Pages
             base.OnInitialized();
 
             Diagram.RegisterModelComponent<DialogueNodeModel, DialogueNode>();
-            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView() { Id = "000", MessageContent = "Text0 text0 text0", Stage = DialogueStage.Begin}));
-            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView() { Id = "001", MessageContent = "Text1 text1 text1", Stage = DialogueStage.Content}));
-            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView() { Id = "002", MessageContent = "Text2 text2 text2", Stage = DialogueStage.End}));
+            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView(1) { Id = Guid.NewGuid(), MessageContent = "Text0 text0 text0", Stage = DialogueStage.Begin}));
+            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView(2) { Id = Guid.NewGuid(), MessageContent = "Text1 text1 text1", Stage = DialogueStage.Content}));
+            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView() { Id = Guid.NewGuid(), MessageContent = "Text2 text2 text2", Stage = DialogueStage.End}));
 
             Diagram.Links.Added += OnLinkAdded;
             Diagram.Links.Removed += Diagram_LinkRemoved;
@@ -59,7 +59,7 @@ namespace DialogueCreationKit.Dialogue.Pages
 
         private void OnLinkTargetPortChanged(BaseLinkModel link, PortModel oldPort, PortModel newPort)
         {
-            link.Labels.Add(new LinkLabelModel(link, "1..*", -40, new Point(0, -30)));
+            //link.Labels.Add(new LinkLabelModel(link, "1..*", -40, new Point(0, -30)));
             link.Refresh();
 
             ((newPort ?? oldPort) as DialoguePortModel).DialogueMessage.Refresh();
