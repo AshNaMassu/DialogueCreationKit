@@ -6,16 +6,9 @@
 <li class="list-group-item">
     @if (DialogueMessage.Stage != DialogueStage.Begin && DialogueNode.GetPort(DialogueMessage) != null)
     {
-        <PortRenderer Port="DialogueNode.GetPort(DialogueMessage)"></PortRenderer>
+        <PortRenderer Port="DialogueNode.GetPort(PortAlignment.Left)"></PortRenderer>
     }
 
-    @if (HasLinks)
-    {
-        <i class="fas fa-key mr-2 text-secondary"></i>
-    }
-
-    @*<span class="text-primary @(true || HasLinks ? "" : "ml-4")">@DialogueMessage.Stage.ToString()</span>*@
-    
     @DialogueMessage.Id
 
     @if (DialogueMessage.Stage != DialogueStage.End && DialogueNode.GetPort(DialogueMessage) != null)

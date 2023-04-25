@@ -9,7 +9,7 @@ namespace DialogueCreationKit.Dialogue.Models.Diagram
         public DialogueNodeModel(DialogueMessageView dialogueMessage, Point position = null) : base(position, RenderLayer.HTML)
         {
             if (dialogueMessage == null)
-                DialogueMessage = new DialogueMessageView();
+                throw new ArgumentNullException(nameof(dialogueMessage));
             else
                 DialogueMessage = dialogueMessage;
 
@@ -19,7 +19,7 @@ namespace DialogueCreationKit.Dialogue.Models.Diagram
             if (DialogueMessage.Stage != DialogueStage.End && DialogueMessage.ChildsNodes != null)
             {
                 foreach (var child in DialogueMessage.ChildsNodes)
-                    AddPort(DialogueMessage, PortAlignment.Right);
+                    AddPort(child, PortAlignment.Right);
             }
                 
         }

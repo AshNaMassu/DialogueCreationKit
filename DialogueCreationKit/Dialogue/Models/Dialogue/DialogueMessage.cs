@@ -6,7 +6,7 @@ namespace DialogueCreationKit.Dialogue.Models
     [Serializable]
     public class DialogueMessage
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public DialogueStage Stage { get; set; }
         public bool IsActive { get;set; }
         public string MessageContent { get; set; }
@@ -14,7 +14,7 @@ namespace DialogueCreationKit.Dialogue.Models
 
         public DialogueMessage()
         {
-            Id = Guid.NewGuid();
+            Id = string.Empty;
             Stage = DialogueStage.None;
             IsActive = true;
             MessageContent = string.Empty;
