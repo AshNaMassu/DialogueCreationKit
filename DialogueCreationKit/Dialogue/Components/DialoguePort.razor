@@ -5,21 +5,21 @@
 
 @if (Node != null && Node.DialogueMessage != null && Child != null)
 {
+    <div class="port-container">
         @if (Child.Stage != DialogueStage.Begin && Port?.Alignment == PortAlignment.Left)
         {
-            <PortRenderer Port="Port" Class="port">
-               L
-            </PortRenderer>
+            <PortRenderer Port="Port" Class="port"/>
         }
 
+        <span style="width: calc(100% - 24px)">
         @Child.Id
+        </span>
 
         @if (Node.DialogueMessage.Stage != DialogueStage.End && Port?.Alignment == PortAlignment.Right)
         {
-            <PortRenderer Port="Port" Class="port">
-                R
-            </PortRenderer>
+            <PortRenderer Port="Port" Class="port"/>
         }
+    </div>
 }
 
 @code {

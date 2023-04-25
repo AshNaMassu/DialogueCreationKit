@@ -2,18 +2,20 @@
 
 <style>
     .dialogue-node {
-        border: 2px solid black;
-        text-align: center;
+        border: 1px solid black;
     }
 
     .dialogue-node.selected {
         border-color: blue;
     }
 
-    .dialogue-node.port {
-        width: 48px;
+    .port-container {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
         height: 24px;
-        background-color: aqua;
+        position: relative;
+        border: 1px solid;
     }
 </style>
 
@@ -22,7 +24,10 @@
         <h6>Text node</h6>
     </div>
 
-    <DialoguePort Child=@Node.DialogueMessage Node=@Node></DialoguePort>
+    @if (Node.DialogueMessage.Stage != Models.Enums.DialogueStage.Begin)
+    {
+        <DialoguePort Child=@Node.DialogueMessage Node=@Node></DialoguePort>
+    }
 
     <h6>@Node.DialogueMessage.MessageContent</h6>
     
