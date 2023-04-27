@@ -2,7 +2,18 @@
 
 <style>
     .dialogue-node {
-        border: 1px solid black;
+        border: 1px solid #67F7D4;
+        background-color: #FFF7C3;
+    }
+
+    .node-header {
+        border: 1px solid #67F7D4;
+        background-color: #FEE60C;
+    }
+    
+    .node-content {
+        border: 1px solid #67F7D4;
+        background-color: #43BF8740;
     }
 
     .dialogue-node.selected {
@@ -13,14 +24,14 @@
         display: flex;
         flex-direction: row;
         width: 100%;
-        height: 24px;
+        min-height: 28px;
         position: relative;
-        border: 1px solid;
+        border: 1px solid #67F7D4;
     }
 </style>
 
 <div class="dialogue-node @(Node.Selected ? "selected" : "")" style="width: 500px;">
-    <div>
+    <div class="node-header">
         <h6>Text node</h6>
     </div>
 
@@ -29,8 +40,10 @@
         <DialoguePort Child=@Node.DialogueMessage Node=@Node></DialoguePort>
     }
 
-    <h6>@Node.DialogueMessage.MessageContent</h6>
-    
+    <div class="node-content">
+        <span style="margin: 4px; background-color: #FFFFC3">@Node.DialogueMessage.MessageContent</span>
+    </div>
+
     <div>
         @foreach(var child in Node.DialogueMessage.ChildsNodes)
         {

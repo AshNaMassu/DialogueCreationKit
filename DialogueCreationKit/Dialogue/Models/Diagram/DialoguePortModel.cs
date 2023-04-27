@@ -25,18 +25,23 @@ namespace DialogueCreationKit.Dialogue.Models.Diagram
             var targetPort = port as DialoguePortModel;
             var targetDialogueMessage = targetPort.DialogueMessage;
 
-            if (targetDialogueMessage.Stage == DialogueStage.Begin)
+            if (targetPort.Alignment == Alignment)
                 return false;
 
-            if (!targetDialogueMessage.Id.HasValue )
-                return false;
-
-            if (DialogueMessage.Id.Equals(targetDialogueMessage.Id))
-                return false;
-
-            //if (DialogueMessage.Primary && targetPort.Links.Count > 0 ||
-            //    targetDialogueMessage.Primary && Links.Count > 1) // Ongoing link
+            //if (DialogueMessage.Id.Equals(targetDialogueMessage.Id))
             //    return false;
+
+            if (Alignment == PortAlignment.Right)
+            {
+                DialogueMessage.Id = targetDialogueMessage.Id;
+            }
+            else
+            {
+                targetDialogueMessage.Id = DialogueMessage.Id;
+            }
+
+            DialogueMessage.Refresh();
+            targetDialogueMessage.Refresh();
 
             return true;
         }
