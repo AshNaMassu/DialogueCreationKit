@@ -27,9 +27,10 @@ namespace DialogueCreationKit.Dialogue.Pages
                     return new LinkModel(sourcePort, null)
                     {
                         Router = Routers.Orthogonal,
-                        PathGenerator = PathGenerators.Straight,
+                        PathGenerator = PathGenerators.Straight
                     };
-                }
+                },
+               // EnableSnapping = true
             }
         });
 
@@ -44,9 +45,9 @@ namespace DialogueCreationKit.Dialogue.Pages
             base.OnInitialized();
 
             Diagram.RegisterModelComponent<DialogueNodeModel, DialogueNode>();
-            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView(1) { Id = Guid.NewGuid(), MessageContent = "Text0 text0 text0", Stage = DialogueStage.Begin}));
-            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView(2) { Id = Guid.NewGuid(), MessageContent = "Text1 text1 text1", Stage = DialogueStage.Content}));
-            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView() { Id = Guid.NewGuid(), MessageContent = "Text2 text2 text2", Stage = DialogueStage.End}));
+            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView(1) { Id = Guid.NewGuid(), MessageContent = "Text0 text0 text0", Stage = DialogueStage.Begin}, new Point(50, 000)));
+            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView(2) { Id = Guid.NewGuid(), MessageContent = "Text1 text1 text1", Stage = DialogueStage.Content}, new Point(50, 200)));
+            Diagram.Nodes.Add(new DialogueNodeModel( new DialogueMessageView() { Id = Guid.NewGuid(), MessageContent = "Text2 text2 text2", Stage = DialogueStage.End}, new Point(50, 400)));
 
             Diagram.Links.Added += OnLinkAdded;
             Diagram.Links.Removed += Diagram_LinkRemoved;
