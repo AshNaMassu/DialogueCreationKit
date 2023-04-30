@@ -1,8 +1,4 @@
-﻿using Blazor.Diagrams.Core.Models;
-using DialogueCreationKit.Dialogue.Models.Dialogue;
-using DialogueCreationKit.Dialogue.Models.Enums;
-
-namespace DialogueCreationKit.Dialogue.Models.Diagram
+﻿namespace DialogueCreationKit.DialogueKit.Models.Dialogue
 {
     public class DialogueMessageView : DialogueMessage
     {
@@ -23,7 +19,7 @@ namespace DialogueCreationKit.Dialogue.Models.Diagram
             for (int i = 0; i < countOfChild; i++)
             {
                 ChildsNodes.Add(new DialogueMessageView());
-            }   
+            }
         }
-    }   
+    }
 }

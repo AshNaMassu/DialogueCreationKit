@@ -1,0 +1,53 @@
+﻿<Sider Collapsible Collapsed=@_collapsed CollapsedChanged=@OnCollapse>
+    <div class="logo" />
+    <Menu Theme="MenuTheme.Dark" DefaultSelectedKeys=@(new[]{"0"}) Mode="MenuMode.Inline">
+        <MenuItem Key="0" RouterLink="/dialoguekit" RouterMatch="NavLinkMatch.All">
+            <Icon Type="desktop" Theme="outline" />
+            <span>Option</span>
+        </MenuItem>
+
+        <MenuItem Key="1" RouterLink="/create" RouterMatch="NavLinkMatch.All">
+            <Icon Type="appstore-add" Theme="outline" />
+            <span>Create</span>
+        </MenuItem>
+
+        @{
+            RenderFragment sub1Title =
+            @<span>
+                <Icon Type="user" Theme="outline" />
+                <span>User</span>
+            </span>
+            ;
+        }
+        <SubMenu Key="sub1" TitleTemplate=sub1Title>
+            <MenuItem Key="3">Tom</MenuItem>
+            <MenuItem Key="4">Bill</MenuItem>
+            <MenuItem Key="5">Alex</MenuItem>
+        </SubMenu>
+        @{
+            RenderFragment sub2Title =
+            @<span>
+                <Icon Type="team" Theme="outline" />
+                <span>Team</span>
+            </span>
+            ;
+        }
+        <SubMenu Key="sub2" TitleTemplate=sub2Title>
+            <MenuItem Key="6">Team 1</MenuItem>
+            <MenuItem Key="8">Team 2</MenuItem>
+        </SubMenu>
+        <MenuItem Key="9">
+            <Icon Type="file" Theme="outline" />
+        </MenuItem>
+    </Menu>
+
+</Sider>
+
+@code {
+    private bool _collapsed { get; set; }
+
+    private void OnCollapse(bool collapsed)
+    {
+        this._collapsed = collapsed;
+    }
+}

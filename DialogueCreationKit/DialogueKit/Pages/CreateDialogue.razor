@@ -1,0 +1,44 @@
+﻿@page "/create"
+@using DialogueCreationKit.DialogueKit.Models.Npc;
+@using Newtonsoft.Json;
+
+
+@if (ListNpc != null)
+{
+    foreach (var npc in ListNpc)
+    {
+        <Form Model="@npc"
+         OnFinish="OnFinish"
+         OnFinishFailed="OnFinishFailed"
+         LabelColSpan="8"
+         WrapperColSpan="16">
+            <FormItem>
+                <Input @bind-Value="@context" />
+            </FormItem>
+            <FormItem Label="Password">
+                <Input @bind-Value="@context.Password" />
+            </FormItem>
+            <FormItem WrapperColOffset="8" WrapperColSpan="16">
+                <Checkbox @bind-Value="context.RememberMe">Remember me</Checkbox>
+            </FormItem>
+            <FormItem WrapperColOffset="8" WrapperColSpan="16">
+                <Button Type="@ButtonType.Primary" HtmlType="submit">
+                    Submit
+                </Button>
+            </FormItem>
+        </Form>
+    }
+}
+@code {
+	private List<Npc> ListNpc { get; set; }
+
+    private void OnFinish(EditContext editContext)
+    {
+        Console.WriteLine($"Success:{JsonSerializer.Serialize(editContext)}");
+    }
+
+    private void OnFinishFailed(EditContext editContext)
+    {
+        Console.WriteLine($"Failed:{JsonSerializer.Serialize(editContext)}");
+    }
+}

@@ -1,4 +1,4 @@
-﻿namespace DialogueCreationKit.Dialogue.Models.Dialogue
+﻿namespace DialogueCreationKit.DialogueKit.Models.Dialogue
 {
     [Serializable]
     public class DialogTree
