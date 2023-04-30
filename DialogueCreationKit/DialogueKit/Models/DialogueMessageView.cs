@@ -1,6 +1,8 @@
-﻿namespace DialogueCreationKit.DialogueKit.Models.Dialogue
+﻿using DialogueCreationKit.DialogueKit.Models.Dialogue;
+
+namespace DialogueCreationKit.DialogueKit.Models
 {
-    public class DialogueMessageView : DialogueMessage
+    public class DialogueMessageView : DialogueNode
     {
         public event Action Changed;
         public List<DialogueMessageView> ChildsNodes { get; set; }

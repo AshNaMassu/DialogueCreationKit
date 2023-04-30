@@ -1,4 +1,4 @@
-﻿namespace DialogueCreationKit.DialogueKit.Models.Npc
+﻿namespace DialogueCreationKit.DialogueKit.Models
 {
     public class Npc
     {

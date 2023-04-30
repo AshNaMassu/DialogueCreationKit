@@ -1,4 +1,4 @@
-﻿namespace DialogueCreationKit.DialogueKit.Models.Enums
+﻿namespace DialogueCreationKit.DialogueKit.Enums
 {
     [Serializable]
     public enum DialogueStage

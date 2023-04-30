@@ -1,22 +1,22 @@
 ﻿using DialogueCreationKit.DialogueKit.Models.Enums;
 
-namespace DialogueCreationKit.DialogueKit.Models.Dialogue
+namespace DialogueCreationKit.DialogueKit.Models
 {
     [Serializable]
-    public class DialogueMessage
+    public class DialogueNode
     {
         public Guid? Id { get; set; }
         public DialogueStage Stage { get; set; }
         public bool IsActive { get; set; }
-        public string MessageContent { get; set; }
+        public Guid MessageId { get; set; }
+        public List<Guid> Childs { get; set; }
 
 
-        public DialogueMessage()
+        public DialogueNode()
         {
             Id = null;
             Stage = DialogueStage.None;
             IsActive = true;
-            MessageContent = string.Empty;
         }
     }
 
