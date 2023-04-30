@@ -1,6 +1,4 @@
-﻿using DialogueCreationKit.DialogueKit.Models.Dialogue;
-
-namespace DialogueCreationKit.DialogueKit.Models
+﻿namespace DialogueCreationKit.DialogueKit.Models
 {
     public class DialogueMessageView : DialogueNode
     {
