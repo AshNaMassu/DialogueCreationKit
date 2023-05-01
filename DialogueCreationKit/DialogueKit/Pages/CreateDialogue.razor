@@ -1,54 +1,80 @@
-﻿@page "/create"
+﻿@page "/"
+@page "/create"
 @using DialogueCreationKit.DialogueKit.Models
 @using System.Text.Json;
+@using System.ComponentModel.DataAnnotations;
+@using System.Globalization;
 
 <style>
     .form-item {
         margin-bottom: 8px;
     }
+
+    .grid-row {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
 </style>
 
-@if (ListNpc != null)
-{
-    foreach (var npc in ListNpc)
-    {
-        <Form Model="@npc"
-         OnFinish="OnFinish"
-         OnFinishFailed="OnFinishFailed"
-         LabelColSpan="4"
-         WrapperColSpan="8"
-         ValidateMode="@FormValidateMode.Rules"
-         ValidateOnChange="true"
-         Size="@AntSizeLDSType.Small">
+<GridRow Class="grid-row ">
+    <GridCol Flex=@("auto")>
+        @if (_listNpc != null)
+        {
+            foreach (var npc in _listNpc)
+            {
+                <GridRow Class="grid-row ">
+                    <GridCol Span=2>
+                        Персонаж
+                    </GridCol>
+                </GridRow>
 
-            <FormItem Rules="@(new FormValidationRule[]{ new FormValidationRule(){  })">
-                <Input @bind-Value="@context.Name" />
-            </FormItem>
-            <FormItem>
-                <Input @bind-Value="@context.Id" />
-                <Button OnClick="@(() => context.Id = Guid.NewGuid())">Сгенерировать</Button>
-            </FormItem>
+                <GridRow Class="grid-row ">
+                    <GridCol Span="6">
+                        <Input @bind-Value="@npc.Name" Placeholder="Имя" />
+                    </GridCol>
+                </GridRow>
 
-        </Form>
-    }
-}
+                <GridRow Class="grid-row ">
+                    <GridCol Span="6">
+                        <Input @bind-Value="@npc.Id" Placeholder="@Guid.Empty.ToString()" />
+                    </GridCol>
+                    <GridCol Flex=@("16px")/>
+                    <GridCol Span="4">
+                        <Button OnClick="@(() => npc.Id = Guid.NewGuid())">Сгенерировать</Button>
+                    </GridCol>
+                </GridRow>       
+            }
+        }
+    </GridCol>
+</GridRow>
 
+<GridRow Class="grid-row ">
+    <GridCol Flex=@("auto")>
+        <GridRow Class="grid-row ">
+            <GridCol Span=4>
+                Содержание диалога
+            </GridCol>
+        </GridRow>
 
-<TextArea Placeholder="Change the text by code" AutoSize OnResize="OnResize" @bind-Value="@txtValue2" />
-<Button OnClick="@(()=>txtValue2 += "\nNew row")">Append Text</Button>
+        <GridRow Class="grid-row ">
+            <GridCol Flex=@("auto")>
+                <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="20" @bind-Value="@_content" />
+            </GridCol>
+        </GridRow>
+    </GridCol>
+</GridRow>
+
+<GridRow Class="grid-row ">
+    <GridCol Span="24">
+        <Button Type="@ButtonType.Primary" Block>Создать дерево диалога</Button>
+    </GridCol>
+</GridRow>
 
 @code {
-    private List<Npc> ListNpc { get; set; } = new List<Npc>() { new Npc(), new Npc() };
+    private List<Npc> _listNpc { get; set; } = new List<Npc>() { new Npc(), new Npc() };
 
-    private string  = "";
+    private string _content = string.Empty;
 
-    private void OnFinish(EditContext editContext)
-    {
-        Console.WriteLine($"Success:{JsonSerializer.Serialize(editContext)}");
-    }
-
-    private void OnFinishFailed(EditContext editContext)
-    {
-        Console.WriteLine($"Failed:{JsonSerializer.Serialize(editContext)}");
-    }
+    
 }
