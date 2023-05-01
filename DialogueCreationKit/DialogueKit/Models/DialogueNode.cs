@@ -1,4 +1,4 @@
-﻿using DialogueCreationKit.DialogueKit.Models.Enums;
+﻿using DialogueCreationKit.DialogueKit.Enums;
 
 namespace DialogueCreationKit.DialogueKit.Models
 {

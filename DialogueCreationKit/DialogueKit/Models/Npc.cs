@@ -1,8 +1,15 @@
-﻿namespace DialogueCreationKit.DialogueKit.Models
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace DialogueCreationKit.DialogueKit.Models
 {
+    [Serializable]
     public class Npc
     {
-        public Guid Id { get; set; }
+        [Required, DisplayName("Имя персонажа")]
         public string Name { get; set; }
+
+        [Required, DisplayName("Идентификатор")]
+        public Guid? Id { get; set; }
     }
 }

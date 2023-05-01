@@ -1,8 +1,12 @@
 ﻿@page "/create"
-@	using DialogueCreationKit.DialogueKit.Models.Npc;
-@	using Newtonsoft.Json;
-	using DialogueCreationKit.DialogueKit.Models;
+@using DialogueCreationKit.DialogueKit.Models
+@using System.Text.Json;
 
+<style>
+    .form-item {
+        margin-bottom: 8px;
+    }
+</style>
 
 @if (ListNpc != null)
 {
@@ -11,27 +15,32 @@
         <Form Model="@npc"
          OnFinish="OnFinish"
          OnFinishFailed="OnFinishFailed"
-         LabelColSpan="8"
-         WrapperColSpan="16">
+         LabelColSpan="4"
+         WrapperColSpan="8"
+         ValidateMode="@FormValidateMode.Rules"
+         ValidateOnChange="true"
+         Size="@AntSizeLDSType.Small">
+
+            <FormItem Rules="@(new FormValidationRule[]{ new FormValidationRule(){  })">
+                <Input @bind-Value="@context.Name" />
+            </FormItem>
             <FormItem>
-                <Input @bind-Value="@context" />
+                <Input @bind-Value="@context.Id" />
+                <Button OnClick="@(() => context.Id = Guid.NewGuid())">Сгенерировать</Button>
             </FormItem>
-            <FormItem Label="Password">
-                <Input @bind-Value="@context.Password" />
-            </FormItem>
-            <FormItem WrapperColOffset="8" WrapperColSpan="16">
-                <Checkbox @bind-Value="context.RememberMe">Remember me</Checkbox>
-            </FormItem>
-            <FormItem WrapperColOffset="8" WrapperColSpan="16">
-                <Button Type="@ButtonType.Primary" HtmlType="submit">
-                    Submit
-                </Button>
-            </FormItem>
+
         </Form>
     }
 }
+
+
+<TextArea Placeholder="Change the text by code" AutoSize OnResize="OnResize" @bind-Value="@txtValue2" />
+<Button OnClick="@(()=>txtValue2 += "\nNew row")">Append Text</Button>
+
 @code {
-	private List<Npc> ListNpc { get; set; }
+    private List<Npc> ListNpc { get; set; } = new List<Npc>() { new Npc(), new Npc() };
+
+    private string  = "";
 
     private void OnFinish(EditContext editContext)
     {

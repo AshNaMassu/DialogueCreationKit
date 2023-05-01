@@ -3,7 +3,7 @@
     [Serializable]
     public class DialogTree
     {
-        public string NPC;
+        public Npc NPC;
         public DialogueNode Root;
     }
 }
