@@ -1,26 +1,49 @@
 ﻿@inherits LayoutComponentBase
 
 <style>
-    #components-layout-demo-side .logo {
-        height: 32px;
-        background: #fff;
-        margin: 16px;
-    }
 
     .site-layout .site-layout-background {
         background: #fff;
     }
 
-    .style-header, .style-footer 
+    .layout-out-style {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    .layout-inner-style {
+        position: absolute;
+        left: 200px;
+        height: 100%;
+        width: calc(100% - 200px) !important;
+    }
+
+    .sider-style {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+    }
+
+    .style-header 
     {
-        max-height: 5vh;
+        height: @_hHeader;
         background-color: #00000020;
     }
 
+    .style-footer {
+        height: @_hFooter;
+        background-color: #00000020;
+        text-align: center;
+    }
+
     .style-content {
-        max-height: 90vh;
+        min-height: calc(100% - @_hFooter - @_hHeader);
+        max-height: calc(100% - @_hFooter - @_hHeader);
+        margin: 0px 0px 0px 16px;
         overflow-y: auto;
-        margin: 0px 16px;
     }
 
     .style-content-inner {
@@ -29,21 +52,26 @@
     }
 </style>
 
-<Layout Style="min-height: 100vh; ">
+@code {
+    private string _hFooter = "24px";
+    private string _hHeader = "32px";
+}
 
-    <NavigationMenu/>
+<div class="layout-out-style">
 
-    <Layout Class="site-layout">
-        <Header Class="style-header"></Header>
-        <Content Class="style-content">
-            <div class="site-layout-background style-content-inner">
+    <NavigationMenu Class="sider-style"/>
+
+    <div class="layout-inner-style">
+        <div class="style-header"></div>
+        <div class="style-content">
+            <div class="style-content-inner">
                 @Body
             </div>
-        </Content>
-        <Footer Class="style-footer" Style="text-align:center ">@($"Dialogue Creation Kit (ver. 0.{DateTime.Now.Month}.{DateTime.Now.Day})\n{DateTime.Now.Year}")</Footer>
-    </Layout>
+        </div>
+        <div class="style-footer">@($"Dialogue Creation Kit (ver. 0.{DateTime.Now.Month}.{DateTime.Now.Day})\n{DateTime.Now.Year}")</div>
+    </div>
 
-</Layout>
+</div>
 
 
 

@@ -1,4 +1,4 @@
-﻿<Sider Collapsible Collapsed=@_collapsed CollapsedChanged=@OnCollapse>
+﻿<Sider Collapsible Collapsed=@_collapsed CollapsedChanged=@OnCollapse Class="@Class">
     <div class="logo" />
     <Menu Theme="MenuTheme.Dark" DefaultSelectedKeys=@(new[]{"1"}) DefaultOpenKeys=@(new[]{"1"}) Mode="MenuMode.Inline">
         <MenuItem Key="0" RouterLink="/dialoguekit" RouterMatch="NavLinkMatch.All">
@@ -42,10 +42,14 @@
 </Sider>
 
 @code {
+    [Parameter] public string Class { get; set; }
+
     private bool _collapsed { get; set; }
 
     private void OnCollapse(bool collapsed)
     {
         this._collapsed = collapsed;
     }
+
+
 }

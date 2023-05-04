@@ -1,5 +1,7 @@
 ﻿@page "/"
 @page "/create"
+@using DialogueCreationKit.DialogueKit.Enums;
+@using DialogueCreationKit.DialogueKit.Managers;
 @using DialogueCreationKit.DialogueKit.Models
 @using System.Text.Json;
 @using System.ComponentModel.DataAnnotations;
@@ -17,37 +19,56 @@
 
 </style>
 
+@inject DialogueCreationModel Model
+
 <GridRow Class="grid-row ">
-    <GridCol Flex=@("auto")>
-        @if (_listNpc != null)
-        {
-            foreach (var npc in _listNpc)
-            {
-                <GridRow Class="grid-row ">
-                    <GridCol Span=2>
-                        Персонаж
-                    </GridCol>
-                </GridRow>
-
-                <GridRow Class="grid-row ">
-                    <GridCol Span="6">
-                        <Input @bind-Value="@npc.Name" Placeholder="Имя" />
-                    </GridCol>
-                </GridRow>
-
-                <GridRow Class="grid-row ">
-                    <GridCol Span="6">
-                        <Input @bind-Value="@npc.Id" Placeholder="@Guid.Empty.ToString()" />
-                    </GridCol>
-                    <GridCol Flex=@("16px")/>
-                    <GridCol Span="4">
-                        <Button OnClick="@(() => npc.Id = Guid.NewGuid())">Сгенерировать</Button>
-                    </GridCol>
-                </GridRow>       
-            }
-        }
+    <GridCol Span=4>
+        <Select @bind-Value="@Model.Mode"
+                DefaultValue="@DialogueCreateMode.Dialogue"
+                TItemValue="DialogueCreateMode"
+                TItem="string" >
+            <SelectOptions>
+                <SelectOption TItemValue="DialogueCreateMode" TItem="string" Value="@DialogueCreateMode.Dialogue" Label="Диалог" />
+                <SelectOption TItemValue="DialogueCreateMode" TItem="string" Value="@DialogueCreateMode.RandomMessages" Label="Рандомные сообщения" />
+            </SelectOptions>
+        </Select>
     </GridCol>
 </GridRow>
+
+@if (Model.Mode == DialogueCreateMode.Dialogue)
+{
+    <GridRow Class="grid-row ">
+        <GridCol Flex=@("auto")>
+            @if (Model.ListNpc != null)
+            {
+                foreach (var npc in Model.ListNpc)
+                {
+                    <GridRow Class="grid-row ">
+                        <GridCol Span=2>
+                            Персонаж
+                        </GridCol>
+                    </GridRow>
+
+                    <GridRow Class="grid-row ">
+                        <GridCol Span="6">
+                            <Input @bind-Value="@npc.Name" Placeholder="Имя" />
+                        </GridCol>
+                    </GridRow>
+
+                    <GridRow Class="grid-row ">
+                        <GridCol Span="6">
+                            <Input @bind-Value="@npc.Id" Placeholder="@Guid.Empty.ToString()" />
+                        </GridCol>
+                        <GridCol Flex=@("16px")/>
+                        <GridCol Span="4">
+                            <Button OnClick="@(() => npc.Id = Guid.NewGuid())">Сгенерировать</Button>
+                        </GridCol>
+                    </GridRow>       
+                }
+            }
+        </GridCol>
+    </GridRow>
+}
 
 <GridRow Class="grid-row ">
     <GridCol Flex=@("auto")>
@@ -59,7 +80,7 @@
 
         <GridRow Class="grid-row ">
             <GridCol Flex=@("auto")>
-                <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="20" @bind-Value="@_content" />
+                <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="15" @bind-Value="@Model.Content" />
             </GridCol>
         </GridRow>
     </GridCol>
@@ -67,14 +88,32 @@
 
 <GridRow Class="grid-row ">
     <GridCol Span="24">
-        <Button Type="@ButtonType.Primary" Block>Создать дерево диалога</Button>
+        <Button Type="@ButtonType.Primary" Block OnClick="( () => CreateDialogueManager.CreateDialogue(Model) )">Создать дерево диалога</Button>
     </GridCol>
 </GridRow>
 
+
 @code {
-    private List<Npc> _listNpc { get; set; } = new List<Npc>() { new Npc(), new Npc() };
+    protected override Task OnInitializedAsync()
+    {
+        Model.Content = _content;
 
-    private string _content = string.Empty;
+        return base.OnInitializedAsync();
+    }
 
-    
+    public string _content { get; set; } =
+        "- привет" + Environment.NewLine +
+        "- привет" + Environment.NewLine +
+        "- как дела?" + Environment.NewLine +
+        "- хорошо, сам как?" + Environment.NewLine +
+        "- да в целом неплохо. что собираешься делать?" +Environment.NewLine +
+        "- посижу поработаю, а дальше хз" +Environment.NewLine +
+        "- план хороший" +Environment.NewLine +
+        "- да, мне тоже нравится" +Environment.NewLine +
+        "- ну ладно, я погнал" +Environment.NewLine +
+        "- а ты куда?" +Environment.NewLine +
+        "- да в деревушку" +Environment.NewLine +
+        "- хэх, забавно" + Environment.NewLine +
+        "- ага, ладно, пока" + Environment.NewLine +
+        "- удачи";
 }
