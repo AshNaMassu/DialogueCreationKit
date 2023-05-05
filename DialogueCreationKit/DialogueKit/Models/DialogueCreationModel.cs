@@ -8,5 +8,7 @@ namespace DialogueCreationKit.DialogueKit.Models
 
         public string Content { get; set; } = string.Empty;
         public DialogueCreateMode Mode { get; set; }
+
+        public List<string> ListMessages { get; set; } = new();
     }
 }

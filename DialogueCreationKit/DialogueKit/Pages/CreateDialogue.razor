@@ -22,76 +22,88 @@
 @inject DialogueCreationModel Model
 
 <GridRow Class="grid-row ">
-    <GridCol Span=4>
-        <Select @bind-Value="@Model.Mode"
-                DefaultValue="@DialogueCreateMode.Dialogue"
-                TItemValue="DialogueCreateMode"
-                TItem="string" >
-            <SelectOptions>
-                <SelectOption TItemValue="DialogueCreateMode" TItem="string" Value="@DialogueCreateMode.Dialogue" Label="Диалог" />
-                <SelectOption TItemValue="DialogueCreateMode" TItem="string" Value="@DialogueCreateMode.RandomMessages" Label="Рандомные сообщения" />
-            </SelectOptions>
-        </Select>
-    </GridCol>
-</GridRow>
-
-@if (Model.Mode == DialogueCreateMode.Dialogue)
-{
-    <GridRow Class="grid-row ">
-        <GridCol Flex=@("auto")>
-            @if (Model.ListNpc != null)
-            {
-                foreach (var npc in Model.ListNpc)
-                {
-                    <GridRow Class="grid-row ">
-                        <GridCol Span=2>
-                            Персонаж
-                        </GridCol>
-                    </GridRow>
-
-                    <GridRow Class="grid-row ">
-                        <GridCol Span="6">
-                            <Input @bind-Value="@npc.Name" Placeholder="Имя" />
-                        </GridCol>
-                    </GridRow>
-
-                    <GridRow Class="grid-row ">
-                        <GridCol Span="6">
-                            <Input @bind-Value="@npc.Id" Placeholder="@Guid.Empty.ToString()" />
-                        </GridCol>
-                        <GridCol Flex=@("16px")/>
-                        <GridCol Span="4">
-                            <Button OnClick="@(() => npc.Id = Guid.NewGuid())">Сгенерировать</Button>
-                        </GridCol>
-                    </GridRow>       
-                }
-            }
-        </GridCol>
-    </GridRow>
-}
-
-<GridRow Class="grid-row ">
-    <GridCol Flex=@("auto")>
+    <!--main-->
+    <GridCol Span="12" Style="background-color: #00000020; padding-left: 8px; padding-right: 8px;">
+        <!--col 0-->
         <GridRow Class="grid-row ">
-            <GridCol Span=4>
-                Содержание диалога
+            <GridCol Span=8>
+                <Select @bind-Value="@Model.Mode"
+                        DefaultValue="@DialogueCreateMode.Dialogue"
+                        TItemValue="DialogueCreateMode"
+                        TItem="string" >
+                    <SelectOptions>
+                        <SelectOption TItemValue="DialogueCreateMode" TItem="string" Value="@DialogueCreateMode.Dialogue" Label="Диалог" />
+                        <SelectOption TItemValue="DialogueCreateMode" TItem="string" Value="@DialogueCreateMode.RandomMessages" Label="Рандомные сообщения" />
+                    </SelectOptions>
+                </Select>
             </GridCol>
         </GridRow>
 
+        @if (Model.Mode == DialogueCreateMode.Dialogue)
+        {
+            <GridRow Class="grid-row ">
+                <GridCol Flex=@("auto")>
+                    @if (Model.ListNpc != null)
+                    {
+                        foreach (var npc in Model.ListNpc)
+                        {
+                            <GridRow Class="grid-row ">
+                                <GridCol Span=4>
+                                    Персонаж
+                                </GridCol>
+                            </GridRow>
+        
+                            <GridRow Class="grid-row ">
+                                <GridCol Span="12">
+                                    <Input @bind-Value="@npc.Name" Placeholder="Имя" />
+                                </GridCol>
+                            </GridRow>
+        
+                            <GridRow Class="grid-row ">
+                                <GridCol Span="12">
+                                    <Input @bind-Value="@npc.Id" Placeholder="@Guid.Empty.ToString()" />
+                                </GridCol>
+                                <GridCol Flex=@("16px")/>
+                                <GridCol Span="8">
+                                    <Button OnClick="@(() => npc.Id = Guid.NewGuid())">Сгенерировать</Button>
+                                </GridCol>
+                            </GridRow>       
+                        }
+                    }
+                </GridCol>
+            </GridRow>
+        }
+
         <GridRow Class="grid-row ">
-            <GridCol Flex=@("auto")>
-                <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="15" @bind-Value="@Model.Content" />
+            <GridCol Span="24">
+                <GridRow Class="grid-row ">
+                    <GridCol Span=8>
+                        Содержание диалога
+                    </GridCol>
+                </GridRow>
+        
+                <GridRow Class="grid-row ">
+                    <GridCol Flex=@("auto")>
+                        <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="15" Value="@Model.Content" DebounceMilliseconds="100" OnChange="@(() => CreateDialogueManager.CreateMessageList(Model))" />
+                    </GridCol>
+                </GridRow>
             </GridCol>
         </GridRow>
+    <!--col 0-->
     </GridCol>
-</GridRow>
 
+                        <GridCol Span="12" Style="background-color: #00000020;  padding-left: 8px; padding-right: 8px;">
+
+    </GridCol>
+<!--main-->
+</GridRow>
+@*
 <GridRow Class="grid-row ">
     <GridCol Span="24">
         <Button Type="@ButtonType.Primary" Block OnClick="( () => CreateDialogueManager.CreateDialogue(Model) )">Создать дерево диалога</Button>
     </GridCol>
 </GridRow>
-
+*@
 
 @code {
     protected override Task OnInitializedAsync()

@@ -4,11 +4,13 @@ namespace DialogueCreationKit.DialogueKit.Managers
 {
     public static class CreateDialogueManager
     {
-        public static void CreateDialogue(DialogueCreationModel model)
+        public static void CreateMessageList(DialogueCreationModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
 
             var messages = model.Content.Split(Environment.NewLine);
+
+            model.ListMessages = new List<string>();
 
             for ( int indexMessage = 0; indexMessage < messages.Length; indexMessage ++ )
             {
@@ -19,8 +21,13 @@ namespace DialogueCreationKit.DialogueKit.Managers
                         break;
                 }
 
-                messages[indexMessage] = messages[indexMessage].Substring(i, messages[indexMessage].Length - i);
+                model.ListMessages.Add(messages[indexMessage].Substring(i, messages[indexMessage].Length - i));
             }
+        }
+
+        public static void CreateDialogueTreeNode(DialogueCreationModel model)
+        {
+
         }
     }
 }
