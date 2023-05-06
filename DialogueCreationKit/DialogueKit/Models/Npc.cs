@@ -11,5 +11,7 @@ namespace DialogueCreationKit.DialogueKit.Models
 
         [Required, DisplayName("Идентификатор")]
         public Guid? Id { get; set; }
+
+        public bool IsFisrt { get; set; }
     }
 }

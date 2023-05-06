@@ -8,13 +8,15 @@
 @using System.Globalization;
 
 <style>
-    .form-item {
-        margin-bottom: 8px;
-    }
-
     .grid-row {
         padding-top: 8px;
         padding-bottom: 8px;
+    }
+
+    .grid-col-main {
+        background-color: #00000020;
+        padding-left: 16px;
+        padding-right: 16px;
     }
 
 </style>
@@ -23,7 +25,7 @@
 
 <GridRow Class="grid-row ">
     <!--main-->
-    <GridCol Span="12" Style="background-color: #00000020; padding-left: 8px; padding-right: 8px;">
+    <GridCol Span="12" Class="grid-col-main">
         <!--col 0-->
         <GridRow Class="grid-row ">
             <GridCol Span=8>
@@ -92,8 +94,15 @@
     <!--col 0-->
     </GridCol>
 
-                        <GridCol Span="12" Style="background-color: #00000020;  padding-left: 8px; padding-right: 8px;">
-
+    <GridCol Span="12" Class="grid-col-main">
+        <GridRow Class="grid-row ">
+            <GridCol Flex=@("auto")>
+                <AntList DataSource="@ListData" ItemLayout="@ListItemLayout.Vertical">
+                    <ChildContent Context="item">
+                    </ChildContent>
+                </AntList>
+            </GridCol>
+        </GridRow>
     </GridCol>
 <!--main-->
 </GridRow>

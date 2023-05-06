@@ -26,7 +26,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
         }
 
         public static void CreateDialogueTreeNode(DialogueCreationModel model)
-        {
+        { 
 
         }
     }

@@ -10,5 +10,6 @@ namespace DialogueCreationKit.DialogueKit.Models
         public DialogueCreateMode Mode { get; set; }
 
         public List<string> ListMessages { get; set; } = new();
+        public List<DialogueMessage> DialogueMessages { get; set; } = new();
     }
 }

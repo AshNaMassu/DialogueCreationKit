@@ -1,0 +1,30 @@
+﻿@using DialogueCreationKit.DialogueKit.Models;
+
+<ListItem OnClick="@OnMessageClick">
+    <ListItemMeta Description="@Message.Id.ToString()">
+        <AvatarTemplate>
+            <Avatar Style=@(Npc.IsFisrt ? color0 : color1)>
+                @Npc.Name.Take(5)
+            </Avatar>
+        </AvatarTemplate>
+        <TitleTemplate>
+            @Npc.Name
+        </TitleTemplate>
+    </ListItemMeta>
+    <div>@Message.Content</div>
+</ListItem>
+
+@code {
+    private string color0 = "background-color: #87d068";
+    private string color1 = "background-color: #f56a00";
+
+    [Parameter]
+    public EventCallback OnMessageClick { get; set; }
+
+    [Parameter]
+    public Npc Npc { get; set; }
+
+    [Parameter]
+    public DialogueMessage Message { get; set; }
+}
+}
