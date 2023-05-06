@@ -4,11 +4,21 @@ namespace DialogueCreationKit.DialogueKit.Models
 {
     public class DialogueCreationModel
     {
-        public List<Npc> ListNpc { get; set; } = new List<Npc>() { new Npc(), new Npc() };
+        public Npc Actor { get; set; }
+        public Npc Companion { get; set; }
 
-        public string Content { get; set; } = string.Empty;
+        public string Content { get; set; }
         public DialogueCreateMode Mode { get; set; }
 
-        public List<DialogueMessageView> ListMessages { get; set; } = new();
+        public List<DialogueMessageView> ListMessages { get; set; }
+
+        public DialogueCreationModel() 
+        {
+            Actor = new Npc();
+            Companion = new Npc();
+            Content = string.Empty;
+            Mode = DialogueCreateMode.Dialogue;
+            ListMessages = new List<DialogueMessageView>();
+        }
     }
 }

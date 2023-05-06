@@ -50,7 +50,7 @@
             <GridCol Flex=@("16px") />
 
             <GridCol Span="5" Offset="4">
-                <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => CreateDialogueManager.CreateMessageList(Model))">Обновить</Button>
+                <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => DialogueCreationManager.CreateMessageList(Model))">Обновить</Button>
             </GridCol>
 
         </GridRow>
@@ -59,36 +59,51 @@
         {
             <GridRow Class="grid-row ">
                 <GridCol Flex=@("auto")>
-                    @if (Model.ListNpc != null)
+                    @if (Model.Actor != null && Model.Companion != null)
                     {
-                        foreach (var npc in Model.ListNpc)
-                        {
-                            <GridRow Class="grid-row ">
-                                <GridCol Span=4>
-                                    Персонаж
-                                </GridCol>
-                            </GridRow>
+                        <GridRow Class="grid-row ">
+                            <GridCol Span=4>
+                                Главный герой
+                            </GridCol>
+                        </GridRow>
         
-                            <GridRow Class="grid-row ">
-                                <GridCol Span="12">
-                                    <Input @bind-Value="@npc.Name" Placeholder="Имя" />
-                                </GridCol>
-                                <GridCol Flex=@("16px") />
-                                <GridCol Span="8">
-                                    <Checkbox  Checked=@npc.IsFisrt CheckedChanged="@((value) => { npc.IsFisrt = value; Model.ListNpc.Where( x => !x.Equals(npc)).FirstOrDefault().IsFisrt = !value;})">Начинает диалог</Checkbox>
-                                </GridCol>
-                            </GridRow>
+                        <GridRow Class="grid-row ">
+                            <GridCol Span="12">
+                                <Input @bind-Value="@Model.Actor.Name" Placeholder="Имя" />
+                            </GridCol>
+                        </GridRow>
         
-                            <GridRow Class="grid-row ">
-                                <GridCol Span="12">
-                                    <Input @bind-Value="@npc.Id" Placeholder="@Guid.Empty.ToString()" />
-                                </GridCol>
-                                <GridCol Flex=@("16px")/>
-                                <GridCol Span="8">
-                                    <Button OnClick="@(() => npc.Id = Guid.NewGuid())">Сгенерировать</Button>
-                                </GridCol>
-                            </GridRow>       
-                        }
+                        <GridRow Class="grid-row ">
+                            <GridCol Span="12">
+                                <Input @bind-Value="@Model.Actor.Id" Placeholder="@Guid.Empty.ToString()" />
+                            </GridCol>
+                            <GridCol Flex=@("16px")/>
+                            <GridCol Span="8">
+                                <Button OnClick="@(() => Model.Actor.Id = Guid.NewGuid())">Сгенерировать</Button>
+                            </GridCol>
+                        </GridRow>
+
+                        <GridRow Class="grid-row ">
+                            <GridCol Span=4>
+                                Собеседник
+                            </GridCol>
+                        </GridRow>
+
+                        <GridRow Class="grid-row ">
+                            <GridCol Span="12">
+                                <Input @bind-Value="@Model.Companion.Name" Placeholder="Имя" />
+                            </GridCol>
+                        </GridRow>
+
+                        <GridRow Class="grid-row ">
+                            <GridCol Span="12">
+                                <Input @bind-Value="@Model.Companion.Id" Placeholder="@Guid.Empty.ToString()" />
+                            </GridCol>
+                            <GridCol Flex=@("16px") />
+                            <GridCol Span="8">
+                                <Button OnClick="@(() => Model.Companion.Id = Guid.NewGuid())">Сгенерировать</Button>
+                            </GridCol>
+                        </GridRow>
                     }
                 </GridCol>
             </GridRow>
@@ -109,7 +124,7 @@
                 </GridRow>
                 <GridRow Class="grid-row ">
                     <GridCol Span="24">
-                        <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => CreateDialogueManager.CreateMessageList(Model))">Обновить</Button>
+                        <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => DialogueCreationManager.CreateMessageList(Model))">Обновить</Button>
                     </GridCol>
                 </GridRow>
             </GridCol>
@@ -138,22 +153,17 @@
 </GridRow>
 *@
 
-                        @code {
+@code {
     protected override Task OnInitializedAsync()
     {
         Model.Content = _content;
 
-        if ((Model.ListNpc.Where(x => x.IsFisrt == true).Count() > 1) || (Model.ListNpc.Where(x => x.IsFisrt == false).Count() > 1))
-        {
-            Model.ListNpc[0].IsFisrt = true;
-            Model.ListNpc[1].IsFisrt = false;
-        }
         return base.OnInitializedAsync();
     }
 
     private void UpdateTheme()
     {
-        CreateDialogueManager.UpdateTheme(Model);
+        DialogueCreationManager.UpdateTheme(Model);
     }
 
     private void OnContentChanged(string value)
@@ -162,7 +172,7 @@
         {
             Model.Content = value;
 
-            CreateDialogueManager.CreateMessageList(Model);
+            DialogueCreationManager.CreateMessageList(Model);
         }
     }
 
@@ -193,7 +203,7 @@
             Model.ListMessages.Remove(_dragging);
             Model.ListMessages.Insert(index, _dragging);
             _dragging = null;
-            CreateDialogueManager.CreateDialogueTreeNode(Model);
+            DialogueCreationManager.CreateDialogueTreeNode(Model);
 
             Model.Content = "- " + string.Join("\n- ", Model.ListMessages.Select(x => x.Message.Content));
 

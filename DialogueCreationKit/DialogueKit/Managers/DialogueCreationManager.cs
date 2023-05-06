@@ -3,7 +3,7 @@ using DialogueCreationKit.DialogueKit.Models;
 
 namespace DialogueCreationKit.DialogueKit.Managers
 {
-    public static class CreateDialogueManager
+    public static class DialogueCreationManager
     {
         public static void CreateMessageList(DialogueCreationModel model)
         {
@@ -42,7 +42,8 @@ namespace DialogueCreationKit.DialogueKit.Managers
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (model.ListMessages == null || model.ListMessages.Count == 0) throw new ArgumentException(nameof(model.ListMessages));
-            if (model.ListNpc == null || model.ListNpc.Count == 0) throw new ArgumentException(nameof(model.ListNpc));
+            if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
+            if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
 
             var content = model.ListMessages.Where(x => x.Node.Stage == DialogueStage.Content);
 
@@ -58,11 +59,9 @@ namespace DialogueCreationKit.DialogueKit.Managers
         public static void CreateDialogueTreeNode(DialogueCreationModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
-            if (model.ListMessages == null || model.ListMessages.Count == 0) throw new ArgumentException(nameof(model.ListMessages)); 
-            if (model.ListNpc == null || model.ListNpc.Count == 0) throw new ArgumentException(nameof(model.ListNpc));
-
-            Npc first = model.ListNpc[model.ListNpc[0].IsFisrt ? 0 : 1],
-            second = model.ListNpc[model.ListNpc[0].IsFisrt ? 1 : 0];
+            if (model.ListMessages == null || model.ListMessages.Count == 0) throw new ArgumentException(nameof(model.ListMessages));
+            if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
+            if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
 
             DialogueNode nodeLast = null;
 
@@ -73,7 +72,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
                     nodeLast = model.ListMessages[i - 1].Node;
                 
                 message.Message.Id = Guid.NewGuid();
-                message.Npc = i % 2 == 0 ? first : second;
+                message.Npc = i % 2 == 0 ? model.Actor : model.Companion;
 
                 message.Node.Id = Guid.NewGuid();
                 message.Node.MessageId = message.Message.Id;
