@@ -1,0 +1,23 @@
+﻿@using DialogueCreationKit.DialogueKit.Models;
+
+<ListItem OnClick="@Message.OnMessageClick">
+    <ListItemMeta Description="@Message.Message.Id.ToString()">
+        <AvatarTemplate>
+            <Avatar Style=@(Message.Npc.IsFisrt ? color0 : color1)>
+                @Message.Npc.Name[0]
+            </Avatar>
+        </AvatarTemplate>
+        <TitleTemplate>
+            @Message.Npc.Name
+        </TitleTemplate>
+    </ListItemMeta>
+    <div>@Message.Message.Content</div>
+</ListItem>
+
+@code {
+    private string color0 = "background-color: #87d068";
+    private string color1 = "background-color: #f56a00";
+
+    [Parameter]
+    public DialogueMessageView Message { get; set; }
+}

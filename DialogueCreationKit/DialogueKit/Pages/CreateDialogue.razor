@@ -1,5 +1,6 @@
 ﻿@page "/"
 @page "/create"
+@using DialogueCreationKit.DialogueKit.Components
 @using DialogueCreationKit.DialogueKit.Enums;
 @using DialogueCreationKit.DialogueKit.Managers;
 @using DialogueCreationKit.DialogueKit.Models
@@ -97,8 +98,9 @@
     <GridCol Span="12" Class="grid-col-main">
         <GridRow Class="grid-row ">
             <GridCol Flex=@("auto")>
-                <AntList DataSource="@ListData" ItemLayout="@ListItemLayout.Vertical">
+                <AntList DataSource="@Model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
                     <ChildContent Context="item">
+                        <MessageView Message="@item"/>
                     </ChildContent>
                 </AntList>
             </GridCol>

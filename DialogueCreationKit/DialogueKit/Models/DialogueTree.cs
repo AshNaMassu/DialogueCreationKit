@@ -1,9 +1,15 @@
 ﻿namespace DialogueCreationKit.DialogueKit.Models
 {
     [Serializable]
-    public class DialogTree
+    public class DialogueTree
     {
-        public Npc NPC;
+        public Npc Npc;
         public DialogueNode Root;
+
+        public DialogueTree()
+        {
+            Npc = new Npc();
+            Root = new DialogueNode();
+        }
     }
 }

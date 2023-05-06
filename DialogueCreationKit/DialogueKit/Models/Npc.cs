@@ -13,5 +13,12 @@ namespace DialogueCreationKit.DialogueKit.Models
         public Guid? Id { get; set; }
 
         public bool IsFisrt { get; set; }
+
+        public Npc() 
+        {
+            Id = null;
+            Name = string.Empty;
+            IsFisrt = false;
+        }
     }
 }
