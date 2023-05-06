@@ -10,7 +10,7 @@ namespace DialogueCreationKit.DialogueKit.Models
         public string Name { get; set; }
 
         [Required, DisplayName("Идентификатор")]
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
 
         public bool IsFisrt { get; set; }
 
