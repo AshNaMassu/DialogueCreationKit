@@ -50,9 +50,10 @@ namespace DialogueCreationKit.DialogueKit.Managers
             int t = 0;
             foreach (var node in content)
             {
-                node.Theme = t;
-                if (node.Node.Childs.Count == 1)
+                if (!node.Node.Child.HasValue)
                     t++;
+
+                node.Theme = t;
             }
         }
 
@@ -76,30 +77,27 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
                 message.Node.Id = Guid.NewGuid();
                 message.Node.MessageId = message.Message.Id;
-                message.Node.Childs.Add(Guid.Empty);
 
                 if (i < 2)
                 {
                     message.Node.Stage = DialogueStage.Begin;
 
                     if (i == 1)
-                        nodeLast.Childs.Add(message.Node.Id);
+                        nodeLast.Child = message.Node.Id;
                 }
                 else if (i > model.ListMessages.Count - 3)
                 {
                     message.Node.Stage = DialogueStage.End;
 
                     if (i == model.ListMessages.Count - 1)
-                        message.Node.Childs.Add(message.Node.Id);
+                        message.Node.Child = message.Node.Id;
                 }
                 else
                 {
                     message.Node.Stage = DialogueStage.Content;
 
-                    message.Node.Childs.Add(new Guid());
-
                     if (i > 3)
-                        message.Node.Childs.Add(nodeLast.Id);
+                        message.Node.Child = nodeLast.Id;
                 }
             }    
         }

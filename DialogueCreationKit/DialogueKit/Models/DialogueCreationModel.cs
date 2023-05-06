@@ -14,7 +14,7 @@ namespace DialogueCreationKit.DialogueKit.Models
 
         public DialogueCreationModel() 
         {
-            Actor = new Npc();
+            Actor = new Npc() { IsActor = true };
             Companion = new Npc();
             Content = string.Empty;
             Mode = DialogueCreateMode.Dialogue;

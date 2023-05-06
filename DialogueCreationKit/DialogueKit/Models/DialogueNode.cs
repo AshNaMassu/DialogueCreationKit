@@ -9,14 +9,13 @@ namespace DialogueCreationKit.DialogueKit.Models
         public DialogueStage Stage { get; set; }
         public bool IsActive { get; set; }
         public Guid MessageId { get; set; }
-        public List<Guid> Childs { get; set; }
+        public Guid? Child { get; set; }
 
 
         public DialogueNode()
         {
             Stage = DialogueStage.None;
             IsActive = true;
-            Childs = new();
         }
     }
 

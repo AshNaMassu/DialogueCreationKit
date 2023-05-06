@@ -60,27 +60,17 @@
 <li @onclick=@Message.OnMessageClick class="message" id="@Message.Message.Id" style="background-color: @(GetColor())">
     <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
         <div class="header">
-            <Avatar Style=@(Message.Npc.IsFisrt ? colorAvatar0 : colorAvatar1) Class="avatar">
+            <Avatar Style=@(Message.Npc.IsActor ? colorAvatar0 : colorAvatar1) Class="avatar">
                 @Message.Npc.Name[0]
             </Avatar>
             <div class="title">
                 <h4 class="name ml-8">
                     @Message.Npc.Name
                 </h4>
-                @if (Message.Npc.IsFisrt && Message.Node.Stage != DialogueStage.Begin && Message.Node.Stage != DialogueStage.End)
+                @if (Message.Npc.IsActor && Message.Node.Stage != DialogueStage.Begin && Message.Node.Stage != DialogueStage.End)
                 {
-                    <Checkbox Checked=@(Message.Node.Childs.Count > 0) CheckedChanged=@(()=> { Message.Node.Childs.RemoveAt(1); UpdateTheme.InvokeAsync();})>Новая тема</Checkbox>
+                    <Checkbox Checked=@(Message.Node.Child.HasValue) CheckedChanged=@(()=> { Message.Node.Child = null; UpdateTheme.InvokeAsync();})>Новая тема</Checkbox>
                 }
-                @*<div style="display: flex; flex-wrap: wrap;">
-                    <div class="id ml-8">
-                        <span>
-                            Id сообщения: 
-                        </span>
-                        <span class="ml-8">
-                            @Message.Message.Id.ToString()
-                        </span>
-                    </div>
-                </div>*@
             </div>
         </div>
         <div>
