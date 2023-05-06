@@ -14,19 +14,25 @@
         padding-bottom: 8px;
     }
 
+        .grid-row.main {
+            height: 100%;
+        }
+
     .grid-col-main {
-        background-color: #00000020;
+        background-color: #0000ff05;
         padding-left: 16px;
         padding-right: 16px;
+        height: 100%;
+        overflow-y: auto;
     }
 
 </style>
 
 @inject DialogueCreationModel Model
 
-<GridRow Class="grid-row ">
+<GridRow Class="grid-row main">
     <!--main-->
-    <GridCol Span="12" Class="grid-col-main">
+    <GridCol Span="12" Class="grid-col-main" >
         <!--col 0-->
         <GridRow Class="grid-row ">
             <GridCol Span=8>
@@ -60,6 +66,10 @@
                                 <GridCol Span="12">
                                     <Input @bind-Value="@npc.Name" Placeholder="Имя" />
                                 </GridCol>
+                                <GridCol Flex=@("16px") />
+                                <GridCol Span="8">
+                                    <Checkbox  Checked=@npc.IsFisrt CheckedChanged="@((value) => { npc.IsFisrt = value; Model.ListNpc.Where( x => !x.Equals(npc)).FirstOrDefault().IsFisrt = !value;})">Начинает диалог</Checkbox>
+                                </GridCol>
                             </GridRow>
         
                             <GridRow Class="grid-row ">
@@ -82,12 +92,17 @@
                 <GridRow Class="grid-row ">
                     <GridCol Span=8>
                         Содержание диалога
-                    </GridCol>
+                    </GridCol> 
                 </GridRow>
-        
+            
                 <GridRow Class="grid-row ">
                     <GridCol Flex=@("auto")>
                         <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="15" Value="@Model.Content" DebounceMilliseconds="100" OnChange="@(() => CreateDialogueManager.CreateMessageList(Model))" />
+                    </GridCol>
+                </GridRow>
+                <GridRow Class="grid-row ">
+                    <GridCol Span="24">
+                        <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => CreateDialogueManager.CreateMessageList(Model))">Обновить</Button>
                     </GridCol>
                 </GridRow>
             </GridCol>
@@ -121,7 +136,17 @@
     {
         Model.Content = _content;
 
+        if ((Model.ListNpc.Where(x => x.IsFisrt == true).Count() > 1) || (Model.ListNpc.Where(x => x.IsFisrt == false).Count() > 1))
+        {
+            Model.ListNpc[0].IsFisrt = true;
+            Model.ListNpc[1].IsFisrt = false;
+        }
         return base.OnInitializedAsync();
+    }
+
+    private void CheckedChanged()
+    {
+        
     }
 
     public string _content { get; set; } =

@@ -1,18 +1,77 @@
 ﻿@using DialogueCreationKit.DialogueKit.Models;
 
-<ListItem OnClick="@Message.OnMessageClick">
-    <ListItemMeta Description="@Message.Message.Id.ToString()">
-        <AvatarTemplate>
-            <Avatar Style=@(Message.Npc.IsFisrt ? color0 : color1)>
+<style>
+    .message {
+        padding: 8px;
+        border-width: 1px;
+        border-style: outset;
+        border-color: #00000010;
+        box-shadow: 0px 0px 10px 1px #00000020;
+        margin-bottom: 4px;
+        margin-top: 4px;
+    }
+
+    .message .header {
+        display: flex; 
+        flex-direction: row;
+        align-items: center;
+        border-bottom: 1px dashed #00000020;
+    }
+
+    .message .header .avatar {
+        margin-right: 8px;
+    }
+
+    .message .header .title {
+        margin-left: 8px;
+    }
+
+    .message .header .title .name{
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 16px;
+        margin-bottom: 0;
+    }
+
+    .message .header .title .id {
+        color: rgba(0, 0, 0, 0.45);
+        font-size: 14px;
+    }
+</style>
+
+    <li @onclick=@Message.OnMessageClick class="message">
+        <div class="header">
+            <Avatar Style=@(Message.Npc.IsFisrt ? color0 : color1) Class="avatar">
                 @Message.Npc.Name[0]
             </Avatar>
-        </AvatarTemplate>
-        <TitleTemplate>
-            @Message.Npc.Name
-        </TitleTemplate>
-    </ListItemMeta>
-    <div>@Message.Message.Content</div>
-</ListItem>
+            <div class="title">
+                <h4 class="name">
+                    @Message.Npc.Name
+                </h4>
+                <div style="display: flex; flex-wrap: wrap;">
+                    <div class="id">
+                        <span>
+                            Id: 
+                        </span>
+                        <span>
+                            @Message.Message.Id.ToString()
+                        </span>
+                    </div>
+
+                    <div class="id">
+                        <span>
+                            Id:
+                        </span>
+                        <span>
+                            @Message.Message.Id.ToString()
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            @Message.Message.Content
+        </div>
+    </li>
 
 @code {
     private string color0 = "background-color: #87d068";
@@ -20,4 +79,9 @@
 
     [Parameter]
     public DialogueMessageView Message { get; set; }
+
+    RenderFragment extra = @<div />;
+
+
+    public bool Loading { get; set; } = false;
 }

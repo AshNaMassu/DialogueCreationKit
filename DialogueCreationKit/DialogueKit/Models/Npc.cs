@@ -16,8 +16,8 @@ namespace DialogueCreationKit.DialogueKit.Models
 
         public Npc() 
         {
-            Id = null;
-            Name = string.Empty;
+            Id = Guid.NewGuid();
+            Name = "ABCDEF"[new Random().Next(0, 6)].ToString();
             IsFisrt = false;
         }
     }
