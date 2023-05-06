@@ -1,4 +1,5 @@
-﻿@using DialogueCreationKit.DialogueKit.Models;
+﻿@using DialogueCreationKit.DialogueKit.Enums;
+@using DialogueCreationKit.DialogueKit.Models;
 
 <style>
     .message {
@@ -6,9 +7,10 @@
         border-width: 1px;
         border-style: outset;
         border-color: #00000010;
-        box-shadow: 0px 0px 10px 1px #00000020;
+        box-shadow: 0px 0px 10px 0px #00000010;
         margin-bottom: 4px;
         margin-top: 4px;
+        /*background-color: #ffffff;*/
     }
 
     .message .header {
@@ -16,6 +18,7 @@
         flex-direction: row;
         align-items: center;
         border-bottom: 1px dashed #00000020;
+        padding-bottom: 8px;
     }
 
     .message .header .avatar {
@@ -23,7 +26,7 @@
     }
 
     .message .header .title {
-        margin-left: 8px;
+        /*margin-left: 8px;*/
     }
 
     .message .header .title .name{
@@ -36,52 +39,72 @@
         color: rgba(0, 0, 0, 0.45);
         font-size: 14px;
     }
+
+    .mr-8,
+    .message .header .title {
+        margin-right: 8px;
+    }
+
+    .ml-8,
+    .message .header .title {
+        margin-left: 8px;
+    }
 </style>
 
-    <li @onclick=@Message.OnMessageClick class="message">
+<li @onclick=@Message.OnMessageClick class="message" id="@Message.Message.Id" style="background-color: @(GetColor())">
+    <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
         <div class="header">
-            <Avatar Style=@(Message.Npc.IsFisrt ? color0 : color1) Class="avatar">
+            <Avatar Style=@(Message.Npc.IsFisrt ? colorAvatar0 : colorAvatar1) Class="avatar">
                 @Message.Npc.Name[0]
             </Avatar>
             <div class="title">
-                <h4 class="name">
+                <h4 class="name ml-8">
                     @Message.Npc.Name
                 </h4>
-                <div style="display: flex; flex-wrap: wrap;">
-                    <div class="id">
+                @*<div style="display: flex; flex-wrap: wrap;">
+                    <div class="id ml-8">
                         <span>
-                            Id: 
+                            Id сообщения: 
                         </span>
-                        <span>
+                        <span class="ml-8">
                             @Message.Message.Id.ToString()
                         </span>
                     </div>
-                    
-                    <div class="id">
-                        <span>
-                            Id:
-                        </span>
-                        <span>
-                            @Message.Message.Id.ToString()
-                        </span>
-                    </div>
-                </div>
+                </div>*@
             </div>
         </div>
         <div>
             @Message.Message.Content
         </div>
+    </div>
     </li>
 
 @code {
-    private string color0 = "background-color: #87d068";
-    private string color1 = "background-color: #f56a00";
+    private string colorAvatar0 = "background-color: #ff8080";
+    private string colorAvatar1 = "background-color: #80ff80";
+
+    private string colorBegin = "#b3efb7";
+    private string[] colorContent = { "#FDD9B5", "#7FFFD4", "#FFDEAD", "#9ACEEB" };
+    private string colorEnd = "#efbeb7";
+
+    private string GetColor()
+    {
+        return Message.Node.Stage switch
+        {
+            DialogueStage.Begin => colorBegin,
+            DialogueStage.Content => colorContent[Message.Theme % colorContent.Length],
+            DialogueStage.End => colorEnd
+        };
+    }
 
     [Parameter]
     public DialogueMessageView Message { get; set; }
 
-    RenderFragment extra = @<div />;
-
+    [Parameter]
+    public EventCallback<DragEventArgs> OnDrop { get; set; }
+    [Parameter]
+    public EventCallback<DragEventArgs> OnDragStart { get; set; }
 
     public bool Loading { get; set; } = false;
+    
 }

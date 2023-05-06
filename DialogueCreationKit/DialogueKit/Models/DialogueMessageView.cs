@@ -10,11 +10,14 @@ namespace DialogueCreationKit.DialogueKit.Models
 
         public DialogueNode Node { get; set; }
 
+        public int Theme { get; set; }
+
         public DialogueMessageView()
         {
             Npc = new Npc();
             Message = new DialogueMessage();
             Node = new DialogueNode();
+            Theme = 0;
         }
 
         public DialogueMessageView(string message) : this()

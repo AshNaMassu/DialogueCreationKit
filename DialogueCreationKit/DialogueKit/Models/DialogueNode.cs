@@ -8,7 +8,7 @@ namespace DialogueCreationKit.DialogueKit.Models
         public Guid? Id { get; set; }
         public DialogueStage Stage { get; set; }
         public bool IsActive { get; set; }
-        public Guid MessageId { get; set; }
+        public Guid? MessageId { get; set; }
         public List<Guid> Childs { get; set; }
 
 

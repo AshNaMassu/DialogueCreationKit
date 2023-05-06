@@ -46,6 +46,13 @@
                     </SelectOptions>
                 </Select>
             </GridCol>
+
+            <GridCol Flex=@("16px") />
+
+            <GridCol Span="5" Offset="4">
+                <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => CreateDialogueManager.CreateMessageList(Model))">Обновить</Button>
+            </GridCol>
+
         </GridRow>
 
         @if (Model.Mode == DialogueCreateMode.Dialogue)
@@ -97,7 +104,7 @@
             
                 <GridRow Class="grid-row ">
                     <GridCol Flex=@("auto")>
-                        <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="15" Value="@Model.Content" DebounceMilliseconds="100" OnChange="@(() => CreateDialogueManager.CreateMessageList(Model))" />
+                        <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="15" Value="@Model.Content" DebounceMilliseconds="100" OnChange="OnContentChanged" />
                     </GridCol>
                 </GridRow>
                 <GridRow Class="grid-row ">
@@ -115,7 +122,7 @@
             <GridCol Flex=@("auto")>
                 <AntList DataSource="@Model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
                     <ChildContent Context="item">
-                        <MessageView Message="@item"/>
+                        <MessageView Message="@item" OnDrop="e=>OnDrop(e, item)" OnDragStart="e=>OnDragStart(e, item)" />
                     </ChildContent>
                 </AntList>
             </GridCol>
@@ -131,7 +138,7 @@
 </GridRow>
 *@
 
-@code {
+                        @code {
     protected override Task OnInitializedAsync()
     {
         Model.Content = _content;
@@ -144,9 +151,14 @@
         return base.OnInitializedAsync();
     }
 
-    private void CheckedChanged()
+    private void OnContentChanged(string value)
     {
-        
+        if (!Model.Content.Equals(value))
+        {
+            Model.Content = value;
+
+            CreateDialogueManager.CreateMessageList(Model);
+        }
     }
 
     public string _content { get; set; } =
@@ -164,4 +176,27 @@
         "- хэх, забавно" + Environment.NewLine +
         "- ага, ладно, пока" + Environment.NewLine +
         "- удачи";
+
+
+    private DialogueMessageView _dragging;
+
+    void OnDrop(DragEventArgs e, DialogueMessageView s)
+    {
+        if (s != null  && _dragging != null)
+        {
+            int index = Model.ListMessages.IndexOf(s);
+            Model.ListMessages.Remove(_dragging);
+            Model.ListMessages.Insert(index, _dragging);
+            _dragging = null;
+            CreateDialogueManager.CreateDialogueTreeNode(Model);
+            StateHasChanged();
+        }
+    }
+
+    void OnDragStart(DragEventArgs e, DialogueMessageView s)
+    {
+        e.DataTransfer.DropEffect = "move";
+        e.DataTransfer.EffectAllowed = "move";
+        _dragging = s;
+    }
 }

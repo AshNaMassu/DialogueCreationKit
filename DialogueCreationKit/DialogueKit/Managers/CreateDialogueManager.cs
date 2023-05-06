@@ -10,9 +10,12 @@ namespace DialogueCreationKit.DialogueKit.Managers
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (string.IsNullOrWhiteSpace(model.Content)) throw new ArgumentException(nameof(model));
 
-            var messages = model.Content.Split(Environment.NewLine);
+            var messages = model.Content.Split('\n');
 
-            model.ListMessages = new List<DialogueMessageView>();
+            if (model.ListMessages == null)
+                model.ListMessages = new List<DialogueMessageView>();
+
+            var startCount = model.ListMessages.Count;
 
             for ( int indexMessage = 0; indexMessage < messages.Length; indexMessage ++ )
             {
@@ -23,8 +26,14 @@ namespace DialogueCreationKit.DialogueKit.Managers
                         break;
                 }
 
-                model.ListMessages.Add(new(messages[indexMessage].Substring(i, messages[indexMessage].Length - i)));
+                if (i < startCount)
+                    model.ListMessages[indexMessage] = new(messages[indexMessage].Substring(i, messages[indexMessage].Length - i));
+                else
+                    model.ListMessages.Add(new(messages[indexMessage].Substring(i, messages[indexMessage].Length - i)));
             }
+
+            if (model.ListMessages.Count > messages.Length)
+                model.ListMessages.RemoveAt(messages.Length);
 
             CreateDialogueTreeNode(model);
         }
@@ -43,6 +52,22 @@ namespace DialogueCreationKit.DialogueKit.Managers
                 var message = model.ListMessages[i];
                 message.Message.Id = Guid.NewGuid();
                 message.Npc = i % 2 == 0 ? first : second;
+
+                message.Node.Id = Guid.NewGuid();
+                message.Node.MessageId = message.Message.Id;
+
+                if (i < 2)
+                {
+                    message.Node.Stage = DialogueStage.Begin;
+                }
+                else if (i > model.ListMessages.Count - 3)
+                {
+                    message.Node.Stage = DialogueStage.End;
+                }
+                else
+                {
+                    message.Node.Stage = DialogueStage.Content;
+                }
             }    
         }
     }
