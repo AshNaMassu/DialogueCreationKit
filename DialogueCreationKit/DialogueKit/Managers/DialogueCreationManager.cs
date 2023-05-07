@@ -8,14 +8,14 @@ namespace DialogueCreationKit.DialogueKit.Managers
         public static void CreateMessageList(DialogueCreationModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
-            if (string.IsNullOrWhiteSpace(model.Content)) throw new ArgumentException(nameof(model));
+            if (string.IsNullOrWhiteSpace(model.Content)) return;// throw new ArgumentException(nameof(model));
 
             var messages = model.Content.Split('\n');
 
             if (model.ListMessages == null)
                 model.ListMessages = new List<DialogueMessageView>();
 
-            var startCount = model.ListMessages.Count;
+            var startBoundIndex = model.ListMessages.Count;
 
             for ( int indexMessage = 0; indexMessage < messages.Length; indexMessage ++ )
             {
@@ -26,7 +26,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
                         break;
                 }
 
-                if (i < startCount)
+                if (indexMessage < startBoundIndex)
                     model.ListMessages[indexMessage] = new(indexMessage, messages[indexMessage].Substring(i, messages[indexMessage].Length - i));
                 else
                     model.ListMessages.Add(new(indexMessage, messages[indexMessage].Substring(i, messages[indexMessage].Length - i)));
@@ -42,6 +42,8 @@ namespace DialogueCreationKit.DialogueKit.Managers
         {
             if (model.ListMessages == null || model.ListMessages.Count == 0) throw new ArgumentException(nameof(model.ListMessages));
 
+            bool needUpdate = true;
+
             if (model.ListStage == null)
             {
                 model.ListStage = new List<DialogueStageView>();
@@ -51,6 +53,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             {
                 if (model.ListMessages.Count > model.ListStage.Count)
                 {
+                    needUpdate = true;
                     int dif = model.ListMessages.Count - model.ListStage.Count;
 
                     for (var i = 0; i < dif; i++)
@@ -62,43 +65,52 @@ namespace DialogueCreationKit.DialogueKit.Managers
                 {
                     model.ListStage.RemoveAt(model.ListMessages.Count);
                 }
+                else
+                {
+                    needUpdate = false;
+                }
             }
 
             for (int i = 0; i < model.ListStage.Count; i++)
             {
+                var stage = model.ListStage[i];
+
                 if (i < 2)
                 {
-                    model.ListStage[i].Stage = DialogueStage.Begin;
+                    stage.Stage = DialogueStage.Begin;
                 }
                 else if (i > model.ListStage.Count - 3 + model.ListStage.Count % 2)
                 {
-                    model.ListStage[i].Stage = DialogueStage.End;
+                    stage.Stage = DialogueStage.End;
                 }
                 else
                 {
-                
+                    stage.Stage = DialogueStage.Content;
                 }
             }
+
+            UpdateTheme(model, needUpdate);
         }
 
-        public static void UpdateTheme(DialogueCreationModel model)
+        public static void UpdateTheme(DialogueCreationModel model, bool needUpdate)
         {
+            if (!needUpdate) return;
+
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (model.ListMessages == null || model.ListMessages.Count == 0) throw new ArgumentException(nameof(model.ListMessages));
             if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
             if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
-            /*
-            var content = model.ListMessages.Where(x => x.Node.Stage == DialogueStage.Content);
-
+            
             int t = 0;
-            foreach (var node in content)
+            foreach (var stage in model.ListStage)
             {
-                if (!node.Node.Child.HasValue)
-                    t++;
+                if (stage.IsNewTheme)
+                    t = (t + 1) % 2;
 
-                node.Theme = t;
+                stage.IdTheme = t;
             }
-            */
+
+            model.OnUpdateAll();
         }
 
         public static void CreateDialogueTreeNode(DialogueCreationModel model)
@@ -108,46 +120,6 @@ namespace DialogueCreationKit.DialogueKit.Managers
             if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
             if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
 
-            /*
-            DialogueNode nodeLast = null;
-
-            for (int i = 0; i < model.ListMessages.Count; i++)
-            {
-                var message = model.ListMessages[i];
-                if (i > 0)
-                    nodeLast = model.ListMessages[i - 1].Node;
-                
-                message.Message.Id = Guid.NewGuid();
-                
-                
-                message.Npc = i % 2 == 0 ? model.Actor : model.Companion;
-
-                message.Node.Id = Guid.NewGuid();
-                message.Node.MessageId = message.Message.Id;
-
-                if (i < 2)
-                {
-                    message.Node.Stage = DialogueStage.Begin;
-
-                    if (i == 1)
-                        nodeLast.Child = message.Node.Id;
-                }
-                else if (i > model.ListMessages.Count - 3)
-                {
-                    message.Node.Stage = DialogueStage.End;
-
-                    if (i == model.ListMessages.Count - 1)
-                        message.Node.Child = message.Node.Id;
-                }
-                else
-                {
-                    message.Node.Stage = DialogueStage.Content;
-
-                    if (i > 3)
-                        message.Node.Child = nodeLast.Id;
-                } 
-            }    
-            */
         }
     }
 }

@@ -13,6 +13,14 @@ namespace DialogueCreationKit.DialogueKit.Models
         public List<DialogueMessageView> ListMessages { get; set; }
         public List<DialogueStageView> ListStage { get; set; }
 
+        public event Action OnUpdateAllEvent; 
+
+        public void OnUpdateAll()
+        {
+            if (OnUpdateAllEvent != null)
+                OnUpdateAllEvent.Invoke();   
+        }
+
         public DialogueCreationModel() 
         {
             Actor = new Npc();

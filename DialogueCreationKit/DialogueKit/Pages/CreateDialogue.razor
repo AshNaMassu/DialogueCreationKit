@@ -29,6 +29,7 @@
 </style>
 
 @inject DialogueCreationModel Model
+@implements IDisposable
 
 <GridRow Class="grid-row main">
     <!--main-->
@@ -137,7 +138,7 @@
             <GridCol Flex=@("auto")>
                 <AntList DataSource="@Enumerable.Range(0, Model.ListMessages.Count)" ItemLayout="@ListItemLayout.Vertical">
                     <ChildContent Context="id">
-                        <MessageView Id=@id OnDrop="e=>OnDrop(e, id)" OnDragStart="e=>OnDragStart(e, id)" UpdateTheme="UpdateTheme" />
+                        <MessageView Id=@id OnDrop="e=>OnDrop(e, id)" OnDragStart="e=>OnDragStart(e, id)" />
                     </ChildContent>
                 </AntList>
             </GridCol>
@@ -157,13 +158,14 @@
     protected override Task OnInitializedAsync()
     {
         Model.Content = _content;
+        Model.OnUpdateAllEvent += Refresh;
 
         return base.OnInitializedAsync();
     }
 
-    private void UpdateTheme()
+    private void Refresh()
     {
-        DialogueCreationManager.UpdateTheme(Model);
+        StateHasChanged();
     }
 
     private void OnContentChanged(string value)
@@ -219,5 +221,10 @@
         e.DataTransfer.DropEffect = "move";
         e.DataTransfer.EffectAllowed = "move";
         _dragging = s;
+    }
+
+    public void Dispose()
+    {
+        Model.OnUpdateAllEvent -= Refresh;
     }
 }

@@ -8,7 +8,7 @@
         border-width: 1px;
         border-style: outset;
         border-color: #00000010;
-        box-shadow: 0px 0px 10px 0px #00000010;
+        box-shadow: 0px 0px 10px 1px #00000040;
         margin-bottom: 4px;
         margin-top: 4px;
         /*background-color: #ffffff;*/
@@ -58,6 +58,7 @@
 </style>
 
 @inject DialogueCreationModel Model
+@implements IDisposable
 
 <li class="message" id="@_message.Id" style="background-color: @(GetColor())">
     <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
@@ -71,7 +72,7 @@
                 </h4>
                 @if (_stage.Stage == DialogueStage.Content && _isActor && Id > 3)
                 {
-                    <Checkbox Checked=@(_stage.Theme == _themeLast) CheckedChanged=@(()=> { })>Новая тема</Checkbox>
+                    <Checkbox @bind-Checked=@_stage.IsNewTheme>Новая тема</Checkbox>
                 }
             </div>
         </div>
@@ -86,7 +87,7 @@
     private string colorAvatar1 = "background-color: #80ff80";
 
     private string colorBegin = "#b3efb7";
-    private string[] colorContent = { "#FDD9B5", "#7FFFD4", "#FFDEAD", "#9ACEEB" };
+    private string[] colorContent = { "#7FFFD4", "#9ACEEB" };
     private string colorEnd = "#efbeb7";
     private string colorDefault = "#ffffff";
 
@@ -95,7 +96,7 @@
         return _stage.Stage switch
         {
             DialogueStage.Begin => colorBegin,
-            DialogueStage.Content => colorContent[_stage.Theme % colorContent.Length],
+            DialogueStage.Content => colorContent[_stage.IdTheme],
             DialogueStage.End => colorEnd,
             _ => colorDefault
         };
@@ -105,7 +106,6 @@
 
     private DialogueMessageView _message => Model.ListMessages[Id];
     private DialogueStageView _stage => Model.ListStage[Id];
-    private int _themeLast => Model.ListStage[Id - 2].Theme;
 
     [Parameter]
     public int Id { get; set; }
@@ -115,8 +115,21 @@
     [Parameter]
     public EventCallback<DragEventArgs> OnDragStart { get; set; }
 
-    [Parameter]
-    public EventCallback UpdateTheme { get; set; }
-
     public bool Loading { get; set; } = false;
+
+    private void UpdateTheme()
+    {
+        DialogueCreationManager.UpdateTheme(Model, true);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _stage.OnUpdateThemeEvent += UpdateTheme;
+        await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        _stage.OnUpdateThemeEvent -= UpdateTheme;        
+    }
 }
