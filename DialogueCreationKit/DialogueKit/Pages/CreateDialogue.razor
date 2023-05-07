@@ -136,9 +136,9 @@
     <GridCol Span="12" Class="grid-col-main">
         <GridRow Class="grid-row ">
             <GridCol Flex=@("auto")>
-                <AntList DataSource="@Enumerable.Range(0, Model.ListMessages.Count)" ItemLayout="@ListItemLayout.Vertical">
-                    <ChildContent Context="id">
-                        <MessageView Id=@id OnDrop="e=>OnDrop(e, id)" OnDragStart="e=>OnDragStart(e, id)" />
+                <AntList DataSource="@Model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
+                    <ChildContent Context="item">
+                        <MessageView Message=@item OnDrop="e=>OnDrop(e, item.Id)" OnDragStart="e=>OnDragStart(e, item.Id)" />
                     </ChildContent>
                 </AntList>
             </GridCol>

@@ -60,7 +60,7 @@
 @inject DialogueCreationModel Model
 @implements IDisposable
 
-<li class="message" id="@_message.Id" style="background-color: @(GetColor())">
+<li class="message" id="@Message.Id" style="background: @(GetColor())">
     <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
         <div class="header">
             <Avatar Style=@(_isActor ? colorAvatar0 : colorAvatar1) Class="avatar">
@@ -70,21 +70,21 @@
                 <h4 class="name ml-8">
                     @(_isActor ? Model.Actor.Name : Model.Companion.Name)
                 </h4>
-                @if (_stage.Stage == DialogueStage.Content && _isActor && Id > 3)
+                @if (_stage.Stage == DialogueStage.Content && _isActor && Message.Id > 3)
                 {
                     <Checkbox @bind-Checked=@_stage.IsNewTheme>Новая тема</Checkbox>
                 }
             </div>
         </div>
         <div>
-            @_message.Message.Content
+            @Message.Message.Content
         </div>
     </div>
 </li>
 
 @code {
     private string colorAvatar0 = "background-color: #ff8080";
-    private string colorAvatar1 = "background-color: #80ff80";
+    private string colorAvatar1 = "background-color: #8080ff";
 
     private string colorBegin = "#b3efb7";
     private string[] colorContent = { "#7FFFD4", "#9ACEEB" };
@@ -102,14 +102,12 @@
         };
     }
 
-    private bool _isActor => _message.Id % 2 == 0;
+    private bool _isActor => Message.Id % 2 == 0;
 
-    private DialogueMessageView _message => Model.ListMessages[Id];
-    private DialogueStageView _stage => Model.ListStage[Id];
+    private DialogueStageView _stage { get; set; }
 
     [Parameter]
-    public int Id { get; set; }
-
+    public DialogueMessageView Message { get; set; }
     [Parameter]
     public EventCallback<DragEventArgs> OnDrop { get; set; }
     [Parameter]
@@ -124,8 +122,14 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _stage = Model.ListStage[Message.Id];
         _stage.OnUpdateThemeEvent += UpdateTheme;
         await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
     }
 
     public void Dispose()
