@@ -1,5 +1,9 @@
 ﻿using DialogueCreationKit.DialogueKit.Enums;
 using DialogueCreationKit.DialogueKit.Models.View;
+using Microsoft.JSInterop;
+using Newtonsoft.Json;
+using System.Text;
+using System.Xml.Linq;
 
 namespace DialogueCreationKit.DialogueKit.Managers
 {
@@ -120,6 +124,19 @@ namespace DialogueCreationKit.DialogueKit.Managers
             if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
             if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
 
+        }
+
+        public static async Task DownloadFile(IJSRuntime js)
+        {
+            var data = new object();
+            // Сериализация данных в формат JSON
+            string json = JsonConvert.SerializeObject(data);
+
+            // Конвертация строки JSON в байты
+            byte[] byteArray = Encoding.UTF8.GetBytes(json);
+
+            // Отправка файла клиенту
+            await js.InvokeVoidAsync("downloadFile", "file.json", byteArray);
         }
     }
 }
