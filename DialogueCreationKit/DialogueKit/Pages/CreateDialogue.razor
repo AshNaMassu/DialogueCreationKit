@@ -146,15 +146,8 @@
     </GridCol>
 <!--main-->
 </GridRow>
-@*
-<GridRow Class="grid-row ">
-    <GridCol Span="24">
-        <Button Type="@ButtonType.Primary" Block OnClick="( () => CreateDialogueManager.CreateDialogue(Model) )">Создать дерево диалога</Button>
-    </GridCol>
-</GridRow>
-*@
 
-                        @code {
+@code {
     protected override Task OnInitializedAsync()
     {
         Model.Content = _content;
@@ -208,9 +201,10 @@
             Model.ListMessages[_dragging.Value] = tempCurrent;
 
             _dragging = null;
-            DialogueCreationManager.CreateDialogueTreeNode(Model);
 
             Model.Content = "- " + string.Join("\n- ", Model.ListMessages.Select(x => x.Message.Content));
+
+            DialogueCreationManager.CreateMessageList(Model);
 
             StateHasChanged();
         }

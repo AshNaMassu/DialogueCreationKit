@@ -113,8 +113,6 @@
     [Parameter]
     public EventCallback<DragEventArgs> OnDragStart { get; set; }
 
-    public bool Loading { get; set; } = false;
-
     private void UpdateTheme()
     {
         DialogueCreationManager.UpdateTheme(Model, true);
