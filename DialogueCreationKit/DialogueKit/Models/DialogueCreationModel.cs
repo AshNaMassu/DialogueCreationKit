@@ -11,14 +11,16 @@ namespace DialogueCreationKit.DialogueKit.Models
         public DialogueCreateMode Mode { get; set; }
 
         public List<DialogueMessageView> ListMessages { get; set; }
+        public List<DialogueStageView> ListStage { get; set; }
 
         public DialogueCreationModel() 
         {
-            Actor = new Npc() { IsActor = true };
+            Actor = new Npc();
             Companion = new Npc();
             Content = string.Empty;
             Mode = DialogueCreateMode.Dialogue;
             ListMessages = new List<DialogueMessageView>();
+            ListStage = new List<DialogueStageView>();
         }
     }
 }

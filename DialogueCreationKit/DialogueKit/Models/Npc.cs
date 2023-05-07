@@ -12,12 +12,10 @@ namespace DialogueCreationKit.DialogueKit.Models
         [Required, DisplayName("Идентификатор")]
         public Guid Id { get; set; }
 
-        public bool IsActor { get; set; }
         public Npc() 
         {
             Id = Guid.NewGuid();
             Name = "ABCDEF"[new Random().Next(0, 6)].ToString();
-            IsActor = false;
         }
     }
 }

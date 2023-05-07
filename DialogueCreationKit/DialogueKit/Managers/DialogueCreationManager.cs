@@ -27,15 +27,58 @@ namespace DialogueCreationKit.DialogueKit.Managers
                 }
 
                 if (i < startCount)
-                    model.ListMessages[indexMessage] = new(messages[indexMessage].Substring(i, messages[indexMessage].Length - i));
+                    model.ListMessages[indexMessage] = new(indexMessage, messages[indexMessage].Substring(i, messages[indexMessage].Length - i));
                 else
-                    model.ListMessages.Add(new(messages[indexMessage].Substring(i, messages[indexMessage].Length - i)));
+                    model.ListMessages.Add(new(indexMessage, messages[indexMessage].Substring(i, messages[indexMessage].Length - i)));
             }
 
             if (model.ListMessages.Count > messages.Length)
                 model.ListMessages.RemoveAt(messages.Length);
 
-            CreateDialogueTreeNode(model);
+            CreateOrUpdateTheme(model);
+        }
+
+        public static void CreateOrUpdateTheme(DialogueCreationModel model)
+        {
+            if (model.ListMessages == null || model.ListMessages.Count == 0) throw new ArgumentException(nameof(model.ListMessages));
+
+            if (model.ListStage == null)
+            {
+                model.ListStage = new List<DialogueStageView>();
+                model.ListStage = model.ListMessages.Select( x => new DialogueStageView()).ToList();
+            }
+            else
+            {
+                if (model.ListMessages.Count > model.ListStage.Count)
+                {
+                    int dif = model.ListMessages.Count - model.ListStage.Count;
+
+                    for (var i = 0; i < dif; i++)
+                    {
+                        model.ListStage.Add(new DialogueStageView());
+                    }
+                }
+                else if (model.ListMessages.Count < model.ListStage.Count)
+                {
+                    model.ListStage.RemoveAt(model.ListMessages.Count);
+                }
+            }
+
+            for (int i = 0; i < model.ListStage.Count; i++)
+            {
+                if (i < 2)
+                {
+                    model.ListStage[i].Stage = DialogueStage.Begin;
+                }
+                else if (i > model.ListStage.Count - 3 + model.ListStage.Count % 2)
+                {
+                    model.ListStage[i].Stage = DialogueStage.End;
+                }
+                else
+                {
+                
+                }
+            }
         }
 
         public static void UpdateTheme(DialogueCreationModel model)
@@ -44,7 +87,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             if (model.ListMessages == null || model.ListMessages.Count == 0) throw new ArgumentException(nameof(model.ListMessages));
             if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
             if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
-
+            /*
             var content = model.ListMessages.Where(x => x.Node.Stage == DialogueStage.Content);
 
             int t = 0;
@@ -55,6 +98,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
                 node.Theme = t;
             }
+            */
         }
 
         public static void CreateDialogueTreeNode(DialogueCreationModel model)
@@ -64,6 +108,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
             if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
 
+            /*
             DialogueNode nodeLast = null;
 
             for (int i = 0; i < model.ListMessages.Count; i++)
@@ -73,6 +118,8 @@ namespace DialogueCreationKit.DialogueKit.Managers
                     nodeLast = model.ListMessages[i - 1].Node;
                 
                 message.Message.Id = Guid.NewGuid();
+                
+                
                 message.Npc = i % 2 == 0 ? model.Actor : model.Companion;
 
                 message.Node.Id = Guid.NewGuid();
@@ -98,8 +145,9 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
                     if (i > 3)
                         message.Node.Child = nodeLast.Id;
-                }
+                } 
             }    
+            */
         }
     }
 }

@@ -135,9 +135,9 @@
     <GridCol Span="12" Class="grid-col-main">
         <GridRow Class="grid-row ">
             <GridCol Flex=@("auto")>
-                <AntList DataSource="@Model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
-                    <ChildContent Context="item">
-                            <MessageView Message="@item" OnDrop="e=>OnDrop(e, item)" OnDragStart="e=>OnDragStart(e, item)" UpdateTheme="UpdateTheme" />
+                <AntList DataSource="@Enumerable.Range(0, Model.ListMessages.Count)" ItemLayout="@ListItemLayout.Vertical">
+                    <ChildContent Context="id">
+                        <MessageView Id=@id OnDrop="e=>OnDrop(e, id)" OnDragStart="e=>OnDragStart(e, id)" UpdateTheme="UpdateTheme" />
                     </ChildContent>
                 </AntList>
             </GridCol>
@@ -153,7 +153,7 @@
 </GridRow>
 *@
 
-@code {
+                        @code {
     protected override Task OnInitializedAsync()
     {
         Model.Content = _content;
@@ -193,15 +193,18 @@
         "- удачи";
 
 
-    private DialogueMessageView _dragging;
+    private int? _dragging;
 
-    void OnDrop(DragEventArgs e, DialogueMessageView s)
+    void OnDrop(DragEventArgs e, int? s)
     {
-        if (s != null  && _dragging != null)
+        if (s.HasValue && _dragging.HasValue)
         {
-            int index = Model.ListMessages.IndexOf(s);
-            Model.ListMessages.Remove(_dragging);
-            Model.ListMessages.Insert(index, _dragging);
+            var tempDrag = Model.ListMessages[_dragging.Value];
+            var tempCurrent = Model.ListMessages[s.Value];
+
+            Model.ListMessages[s.Value] = tempDrag;
+            Model.ListMessages[_dragging.Value] = tempCurrent;
+
             _dragging = null;
             DialogueCreationManager.CreateDialogueTreeNode(Model);
 
@@ -211,7 +214,7 @@
         }
     }
 
-    void OnDragStart(DragEventArgs e, DialogueMessageView s)
+    void OnDragStart(DragEventArgs e, int? s)
     {
         e.DataTransfer.DropEffect = "move";
         e.DataTransfer.EffectAllowed = "move";

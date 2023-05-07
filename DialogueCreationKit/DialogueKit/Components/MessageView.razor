@@ -57,27 +57,29 @@
     }
 </style>
 
-<li @onclick=@Message.OnMessageClick class="message" id="@Message.Message.Id" style="background-color: @(GetColor())">
+@inject DialogueCreationModel Model
+
+<li class="message" id="@_message.Id" style="background-color: @(GetColor())">
     <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
         <div class="header">
-            <Avatar Style=@(Message.Npc.IsActor ? colorAvatar0 : colorAvatar1) Class="avatar">
-                @Message.Npc.Name[0]
+            <Avatar Style=@(_isActor ? colorAvatar0 : colorAvatar1) Class="avatar">
+                @(_isActor ? Model.Actor.Name[0] : Model.Companion.Name[0])
             </Avatar>
             <div class="title">
                 <h4 class="name ml-8">
-                    @Message.Npc.Name
+                    @(_isActor ? Model.Actor.Name : Model.Companion.Name)
                 </h4>
-                @if (Message.Npc.IsActor && Message.Node.Stage != DialogueStage.Begin && Message.Node.Stage != DialogueStage.End)
+                @if (_stage.Stage == DialogueStage.Content && _isActor && Id > 3)
                 {
-                    <Checkbox Checked=@(Message.Node.Child.HasValue) CheckedChanged=@(()=> { Message.Node.Child = null; UpdateTheme.InvokeAsync();})>Новая тема</Checkbox>
+                    <Checkbox Checked=@(_stage.Theme == _themeLast) CheckedChanged=@(()=> { })>Новая тема</Checkbox>
                 }
             </div>
         </div>
         <div>
-            @Message.Message.Content
+            @_message.Message.Content
         </div>
     </div>
-    </li>
+</li>
 
 @code {
     private string colorAvatar0 = "background-color: #ff8080";
@@ -86,19 +88,27 @@
     private string colorBegin = "#b3efb7";
     private string[] colorContent = { "#FDD9B5", "#7FFFD4", "#FFDEAD", "#9ACEEB" };
     private string colorEnd = "#efbeb7";
+    private string colorDefault = "#ffffff";
 
     private string GetColor()
     {
-        return Message.Node.Stage switch
+        return _stage.Stage switch
         {
             DialogueStage.Begin => colorBegin,
-            DialogueStage.Content => colorContent[Message.Theme % colorContent.Length],
-            DialogueStage.End => colorEnd
+            DialogueStage.Content => colorContent[_stage.Theme % colorContent.Length],
+            DialogueStage.End => colorEnd,
+            _ => colorDefault
         };
     }
 
+    private bool _isActor => _message.Id % 2 == 0;
+
+    private DialogueMessageView _message => Model.ListMessages[Id];
+    private DialogueStageView _stage => Model.ListStage[Id];
+    private int _themeLast => Model.ListStage[Id - 2].Theme;
+
     [Parameter]
-    public DialogueMessageView Message { get; set; }
+    public int Id { get; set; }
 
     [Parameter]
     public EventCallback<DragEventArgs> OnDrop { get; set; }
@@ -109,5 +119,4 @@
     public EventCallback UpdateTheme { get; set; }
 
     public bool Loading { get; set; } = false;
-    
 }

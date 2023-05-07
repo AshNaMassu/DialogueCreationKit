@@ -4,12 +4,16 @@
     public class DialogueTree
     {
         public Npc Npc;
-        public DialogueNode Root;
+        public DialogueNode Begin;
+        public List<DialogueNode> Content;
+        public DialogueNode End;
 
         public DialogueTree()
         {
             Npc = new Npc();
-            Root = new DialogueNode();
+            Begin = new DialogueNode();
+            Content = new List<DialogueNode>();
+            End = new DialogueNode();
         }
     }
 }

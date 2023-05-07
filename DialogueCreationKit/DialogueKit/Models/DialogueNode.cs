@@ -14,6 +14,7 @@ namespace DialogueCreationKit.DialogueKit.Models
 
         public DialogueNode()
         {
+            Id = Guid.NewGuid();
             Stage = DialogueStage.None;
             IsActive = true;
         }
