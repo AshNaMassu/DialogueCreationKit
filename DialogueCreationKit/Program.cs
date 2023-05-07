@@ -1,4 +1,4 @@
-using DialogueCreationKit.DialogueKit.Models;
+using DialogueCreationKit.DialogueKit.Models.View;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 

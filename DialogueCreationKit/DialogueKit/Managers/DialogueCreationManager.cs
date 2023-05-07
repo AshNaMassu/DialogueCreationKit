@@ -1,5 +1,5 @@
 ﻿using DialogueCreationKit.DialogueKit.Enums;
-using DialogueCreationKit.DialogueKit.Models;
+using DialogueCreationKit.DialogueKit.Models.View;
 
 namespace DialogueCreationKit.DialogueKit.Managers
 {

@@ -3,13 +3,15 @@
     [Serializable]
     public class DialogueTree
     {
-        public Npc Npc;
-        public DialogueNode Begin;
-        public List<DialogueNode> Content;
-        public DialogueNode End;
+        public Guid Id { get; set; }
+        public Npc Npc { get; set; }
+        public DialogueNode Begin { get; set; }
+        public List<DialogueNode> Content { get; set; }
+        public DialogueNode End { get; set; }
 
         public DialogueTree()
         {
+            Id = Guid.NewGuid();
             Npc = new Npc();
             Begin = new DialogueNode();
             Content = new List<DialogueNode>();

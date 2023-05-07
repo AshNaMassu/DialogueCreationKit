@@ -1,6 +1,7 @@
 ﻿@using DialogueCreationKit.DialogueKit.Enums;
 @using DialogueCreationKit.DialogueKit.Managers;
 @using DialogueCreationKit.DialogueKit.Models;
+@using DialogueCreationKit.DialogueKit.Models.View;
 
 <style>
     .message {
@@ -60,27 +61,45 @@
 @inject DialogueCreationModel Model
 @implements IDisposable
 
-<li class="message" id="@Message.Id" style="background: @(GetColor())">
-    <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
-        <div class="header">
-            <Avatar Style=@(_isActor ? colorAvatar0 : colorAvatar1) Class="avatar">
-                @(_isActor ? Model.Actor.Name[0] : Model.Companion.Name[0])
-            </Avatar>
-            <div class="title">
-                <h4 class="name ml-8">
-                    @(_isActor ? Model.Actor.Name : Model.Companion.Name)
-                </h4>
-                @if (_stage.Stage == DialogueStage.Content && _isActor && Message.Id > 3)
-                {
-                    <Checkbox @bind-Checked=@_stage.IsNewTheme>Новая тема</Checkbox>
-                }
+@if (Model.Mode == DialogueCreateMode.Dialogue)
+{
+    <li class="message" id="@Message.Id" style="background: @(GetColor())">
+        <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
+            <div class="header">
+                <Avatar Style=@(_isActor ? colorAvatar0 : colorAvatar1) Class="avatar">
+                    @(
+                        _isActor ? Model.Actor.Name[0] : Model.Companion.Name[0]
+                        )
+                </Avatar>
+                <div class="title">
+                    <h4 class="name ml-8">
+                        @(
+                            _isActor ? Model.Actor.Name : Model.Companion.Name
+                            )
+                    </h4>
+                    @if (_stage.Stage == DialogueStage.Content && _isActor && Message.Id > 3)
+                    {
+                        <Checkbox @bind-Checked=@_stage.IsNewTheme>Новая тема</Checkbox>
+                    }
+                </div>
+            </div>
+            <div>
+                @Message.Message.Content
             </div>
         </div>
-        <div>
-            @Message.Message.Content
+    </li>
+}
+else
+{
+    <li class="message" id="@Message.Id" style="background: #ffffff">
+        <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
+            <div>
+                @Message.Message.Content
+            </div>
         </div>
-    </div>
-</li>
+    </li>
+}
+
 
 @code {
     private string colorAvatar0 = "background-color: #ff8080";

@@ -1,23 +1,23 @@
 ﻿using DialogueCreationKit.DialogueKit.Enums;
 
-namespace DialogueCreationKit.DialogueKit.Models
+namespace DialogueCreationKit.DialogueKit.Models.View
 {
     public class DialogueStageView
     {
         public DialogueStage Stage { get; set; }
 
-        public bool IsNewTheme 
-        { 
-            get => _isNewTheme; 
+        public bool IsNewTheme
+        {
+            get => _isNewTheme;
             set
             {
-                if (_isNewTheme != value) 
+                if (_isNewTheme != value)
                 {
                     _isNewTheme = value;
                     if (OnUpdateThemeEvent != null)
                         OnUpdateThemeEvent.Invoke();
                 }
-            } 
+            }
         }
         private bool _isNewTheme;
         public int IdTheme { get; set; }

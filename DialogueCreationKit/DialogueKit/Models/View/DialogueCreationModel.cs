@@ -1,6 +1,6 @@
 ﻿using DialogueCreationKit.DialogueKit.Enums;
 
-namespace DialogueCreationKit.DialogueKit.Models
+namespace DialogueCreationKit.DialogueKit.Models.View
 {
     public class DialogueCreationModel
     {
@@ -13,15 +13,15 @@ namespace DialogueCreationKit.DialogueKit.Models
         public List<DialogueMessageView> ListMessages { get; set; }
         public List<DialogueStageView> ListStage { get; set; }
 
-        public event Action OnUpdateAllEvent; 
+        public event Action OnUpdateAllEvent;
 
         public void OnUpdateAll()
         {
             if (OnUpdateAllEvent != null)
-                OnUpdateAllEvent.Invoke();   
+                OnUpdateAllEvent.Invoke();
         }
 
-        public DialogueCreationModel() 
+        public DialogueCreationModel()
         {
             Actor = new Npc();
             Companion = new Npc();
