@@ -195,11 +195,13 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
                 tree.End = nodes.FirstOrDefault(x => x.Stage == DialogueStage.End);
 
-                var jsonNodes = JsonConvert.SerializeObject(nodes);
-                await DownloadFile(js, tree.Npc.Name + "_" + tree.Id.ToString() + ".nodes_json", jsonNodes);
+                DialogueStorage storage = new DialogueStorage() { Nodes = nodes, Tree = tree };
 
-                var jsonTree = JsonConvert.SerializeObject(tree);
-                await DownloadFile(js, tree.Npc.Name + "_" + tree.Id.ToString() + ".tree_json", jsonTree);
+                //var jsonNodes = JsonConvert.SerializeObject(nodes);
+                //await DownloadFile(js, tree.Npc.Name + "_" + tree.Id.ToString() + ".nodes_json", jsonNodes);
+
+                var jsonStorage = JsonConvert.SerializeObject(storage);
+                await DownloadFile(js, tree.Npc.Name + "_" + tree.Id.ToString() + ".storage_json", jsonStorage);
             }
         }
 

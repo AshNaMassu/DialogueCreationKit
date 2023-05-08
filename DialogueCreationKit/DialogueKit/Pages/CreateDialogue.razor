@@ -38,7 +38,7 @@
     <GridCol Span="12" Class="grid-col-main" >
         <!--col 0-->
         <GridRow Class="grid-row ">
-            <GridCol Span=8>
+            <GridCol Span="12">
                 <Select @bind-Value="@Model.Mode"
                         DefaultValue="@DialogueCreateMode.Dialogue"
                         TItemValue="DialogueCreateMode"
@@ -52,7 +52,7 @@
 
             <GridCol Flex=@("16px") />
 
-            <GridCol Span="5" Offset="4">
+            <GridCol Span="8">
                 <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => DialogueCreationManager.CreateMessageList(Model))">Обновить</Button>
             </GridCol>
 
@@ -95,7 +95,7 @@
                           <Input @bind-Value="@Model.Companion.Id" Placeholder="@Guid.Empty.ToString()" />
                        </GridCol>
                        <GridCol Flex=@("16px") />
-                          <GridCol Span="8">
+                       <GridCol Span="8">
                              <Button OnClick="@(() => Model.Companion.Id = Guid.NewGuid())">Сгенерировать</Button>
                        </GridCol>
                     </GridRow>
