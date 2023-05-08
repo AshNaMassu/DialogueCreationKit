@@ -61,7 +61,7 @@
         {
             <GridRow Class="grid-row ">
                 <GridCol Flex=@("auto")>
-                    @if (Model.Actor != null && Model.Companion != null)
+                    @if (Model != null && Model.Companion != null)
                     {
                         <GridRow Class="grid-row ">
                             <GridCol Span=4>
@@ -71,10 +71,10 @@
         
                         <GridRow Class="grid-row ">
                             <GridCol Span="12">
-                                <Input @bind-Value="@Model.Actor.Name" Placeholder="Имя" />
+                                <Input @bind-Value="@Model.ActorName" Placeholder="Имя" />
                             </GridCol>
                         </GridRow>
-        
+                        @*
                         <GridRow Class="grid-row ">
                             <GridCol Span="12">
                                 <Input @bind-Value="@Model.Actor.Id" Placeholder="@Guid.Empty.ToString()" />
@@ -84,7 +84,7 @@
                                 <Button OnClick="@(() => Model.Actor.Id = Guid.NewGuid())">Сгенерировать</Button>
                             </GridCol>
                         </GridRow>
-
+                        *@
                         <GridRow Class="grid-row ">
                             <GridCol Span=4>
                                 Собеседник

@@ -68,13 +68,13 @@
             <div class="header">
                 <Avatar Style=@(_isActor ? colorAvatar0 : colorAvatar1) Class="avatar">
                     @(
-                        _isActor ? Model.Actor.Name[0] : Model.Companion.Name[0]
+                        _isActor ? Model.ActorName[0] : Model.Companion.Name[0]
                         )
                 </Avatar>
                 <div class="title">
                     <h4 class="name ml-8">
                         @(
-                            _isActor ? Model.Actor.Name : Model.Companion.Name
+                            _isActor ? Model.ActorName : Model.Companion.Name
                             )
                     </h4>
                     @if (_stage.Stage == DialogueStage.Content && _isActor && Message.Id > 3)

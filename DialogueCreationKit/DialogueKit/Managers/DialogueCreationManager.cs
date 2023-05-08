@@ -1,5 +1,6 @@
-﻿using DialogueCreationKit.DialogueKit.Enums;
+﻿    using DialogueCreationKit.DialogueKit.Enums;
 using DialogueCreationKit.DialogueKit.Models.View;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using System.Text;
@@ -102,7 +103,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (model.ListMessages == null || model.ListMessages.Count == 0) throw new ArgumentException(nameof(model.ListMessages));
-            if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
+            //if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
             if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
             
             int t = 0;
@@ -121,10 +122,12 @@ namespace DialogueCreationKit.DialogueKit.Managers
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (model.ListMessages == null || model.ListMessages.Count == 0) throw new ArgumentException(nameof(model.ListMessages));
-            if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
+            //if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
             if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
 
         }
+
+        public static Serialize()
 
         public static async Task DownloadFile(IJSRuntime js)
         {
