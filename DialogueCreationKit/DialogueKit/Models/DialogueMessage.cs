@@ -1,6 +1,6 @@
 ﻿namespace DialogueCreationKit.DialogueKit.Models
 {
-
+    /*
     [Serializable]
     public class DialogueMessage
     {
@@ -13,4 +13,5 @@
         }
 
     }
+    */
 }

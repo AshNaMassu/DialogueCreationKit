@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div>
-                @Message.Message.Content
+                @Message.Message
             </div>
         </div>
     </li>
@@ -94,7 +94,7 @@ else
     <li class="message" id="@Message.Id" style="background: #ffffff">
         <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
             <div>
-                @Message.Message.Content
+                @Message.Message
             </div>
         </div>
     </li>

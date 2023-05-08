@@ -29,6 +29,7 @@
 
 </style>
 
+@inject IJSRuntime JSRuntime
 @inject DialogueCreationModel Model
 @implements IDisposable
 
@@ -57,59 +58,50 @@
 
         </GridRow>
 
-        @if (Model.Mode == DialogueCreateMode.Dialogue)
-        {
-            <GridRow Class="grid-row ">
-                <GridCol Flex=@("auto")>
-                    @if (Model != null && Model.Companion != null)
-                    {
-                        <GridRow Class="grid-row ">
-                            <GridCol Span=4>
-                                Главный герой
-                            </GridCol>
-                        </GridRow>
-        
-                        <GridRow Class="grid-row ">
-                            <GridCol Span="12">
+       
+        <GridRow Class="grid-row ">
+            <GridCol Flex=@("auto")>
+                @if (Model != null)
+                {
+                    <GridRow Class="grid-row ">
+                        <GridCol Span=4>
+                            @(Model.Mode == DialogueCreateMode.Dialogue ? "Главный герой" : "Имя файла")
+                        </GridCol>
+                    </GridRow>
+
+                    <GridRow Class="grid-row ">
+                        <GridCol Span="12">
                                 <Input @bind-Value="@Model.ActorName" Placeholder="Имя" />
                             </GridCol>
                         </GridRow>
-                        @*
-                        <GridRow Class="grid-row ">
-                            <GridCol Span="12">
-                                <Input @bind-Value="@Model.Actor.Id" Placeholder="@Guid.Empty.ToString()" />
-                            </GridCol>
-                            <GridCol Flex=@("16px")/>
-                            <GridCol Span="8">
-                                <Button OnClick="@(() => Model.Actor.Id = Guid.NewGuid())">Сгенерировать</Button>
-                            </GridCol>
-                        </GridRow>
-                        *@
-                        <GridRow Class="grid-row ">
-                            <GridCol Span=4>
-                                Собеседник
-                            </GridCol>
-                        </GridRow>
+                }
 
-                        <GridRow Class="grid-row ">
-                            <GridCol Span="12">
-                                <Input @bind-Value="@Model.Companion.Name" Placeholder="Имя" />
-                            </GridCol>
-                        </GridRow>
+                @if (Model.Mode == DialogueCreateMode.Dialogue && Model.Companion != null)
+                {
+                    <GridRow Class="grid-row ">
+                        <GridCol Span=4>
+                             Собеседник
+                       </GridCol>
+                    </GridRow>
 
-                        <GridRow Class="grid-row ">
-                            <GridCol Span="12">
-                                <Input @bind-Value="@Model.Companion.Id" Placeholder="@Guid.Empty.ToString()" />
-                            </GridCol>
-                            <GridCol Flex=@("16px") />
-                            <GridCol Span="8">
-                                <Button OnClick="@(() => Model.Companion.Id = Guid.NewGuid())">Сгенерировать</Button>
-                            </GridCol>
-                        </GridRow>
-                    }
+                    <GridRow Class="grid-row ">
+                       <GridCol Span="12">
+                           <Input @bind-Value="@Model.Companion.Name" Placeholder="Имя" />
+                       </GridCol>
+                    </GridRow>
+
+                    <GridRow Class="grid-row ">
+                       <GridCol Span="12">
+                          <Input @bind-Value="@Model.Companion.Id" Placeholder="@Guid.Empty.ToString()" />
+                       </GridCol>
+                       <GridCol Flex=@("16px") />
+                          <GridCol Span="8">
+                             <Button OnClick="@(() => Model.Companion.Id = Guid.NewGuid())">Сгенерировать</Button>
+                       </GridCol>
+                    </GridRow>
+                }
                 </GridCol>
             </GridRow>
-        }
 
         <GridRow Class="grid-row ">
             <GridCol Span="24">
@@ -139,10 +131,9 @@
         {
             <GridRow Class="grid-row ">
                 <GridCol Span="24">
-                    <Button   
-                Block Icon="@IconType.Outline.Download" OnClick="@(() => {})">Скачать диалог</Button>
-                    </GridCol>
-                    </GridRow>
+                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(JSRuntime, Model))">Скачать диалог</Button>
+                </GridCol>
+            </GridRow>
             <GridRow Class="grid-row ">
                 <GridCol Flex=@("auto")>
                 <AntList DataSource="@Model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
@@ -154,7 +145,7 @@
             </GridRow>
             <GridRow Class="grid-row ">
                 <GridCol Span="24">
-                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => {})">Скачать диалог</Button>
+                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(JSRuntime, Model))">Скачать диалог</Button>
                 </GridCol>
             </GridRow>
         }
@@ -217,7 +208,7 @@
 
             _dragging = null;
 
-            Model.Content = "- " + string.Join("\n- ", Model.ListMessages.Select(x => x.Message.Content));
+            Model.Content = "- " + string.Join("\n- ", Model.ListMessages.Select(x => x.Message));
 
             DialogueCreationManager.CreateMessageList(Model);
 
