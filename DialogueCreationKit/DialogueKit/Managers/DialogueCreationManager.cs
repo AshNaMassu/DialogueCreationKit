@@ -168,7 +168,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
                     {
                         case DialogueStage.Content:
                             {
-                                if ((i % 2 == 0) || (stages[i + 1].Stage != DialogueStage.End && stages[i + 1].IsNewTheme))
+                                if ((i % 2 == 0) || (stages[i + 1].Stage != DialogueStage.End && !stages[i + 1].IsNewTheme))
                                 {
                                     nodes[i].Child = nodes[i + 1].Id;
                                 }
