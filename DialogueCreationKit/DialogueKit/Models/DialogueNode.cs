@@ -7,7 +7,7 @@ namespace DialogueCreationKit.DialogueKit.Models
     {
         public Guid Id { get; set; }
         public DialogueStage Stage { get; set; }
-        public bool IsActive { get; set; }
+        //public bool IsActive { get; set; }
         public string Message { get; set; }
         //public Guid MessageId { get; set; }
         public Guid? Child { get; set; }
@@ -17,7 +17,7 @@ namespace DialogueCreationKit.DialogueKit.Models
         {
             Id = Guid.NewGuid();
             Stage = DialogueStage.None;
-            IsActive = true;
+            //IsActive = true;
             Message = string.Empty;
         }
     }
