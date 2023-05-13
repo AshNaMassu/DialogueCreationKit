@@ -184,16 +184,16 @@ namespace DialogueCreationKit.DialogueKit.Managers
                     }
                 }
 
-                tree.Begin = nodes.FirstOrDefault(x => x.Stage == DialogueStage.Begin);
+                tree.Begin = nodes.FirstOrDefault(x => x.Stage == DialogueStage.Begin).Id;
 
                 //tree.Content = nodes.FirstOrDefault(x => x.Stage == DialogueStage.Content && x.Child.);
                 for (int i = 2; i < stages.Count - 3 + stages.Count % 2; i+= 2)
                 {
                     if (stages[i].IsNewTheme)
-                        tree.Content.Add(nodes[i]);
+                        tree.Content.Add(nodes[i].Id);
                 }
 
-                tree.End = nodes.FirstOrDefault(x => x.Stage == DialogueStage.End);
+                tree.End = nodes.FirstOrDefault(x => x.Stage == DialogueStage.End).Id;
 
                 DialogueStorage storage = new DialogueStorage() { Nodes = nodes, Tree = tree };
 
