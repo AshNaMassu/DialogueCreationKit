@@ -3,6 +3,7 @@ using DialogueCreationKit.DialogueKit.Managers.Responses;
 using DialogueCreationKit.DialogueKit.Helpers;
 using DeepMorphy;
 using DeepMorphy.Model;
+using DialogueCreationKit.DialogueKit.Models;
 
 namespace DialogueCreationKit.DialogueKit.Managers;
 
@@ -44,41 +45,43 @@ public static class MorphemesManager
         { Code = 0, Message = @"Инициализация успешна!", Status = true };
     }
 
-    public static string GetMessageWithOptions(bool fairytaleFlag = false)
+    public static List<SLexemOutput> GetMessageWithOptions(bool fairytaleFlag = false)
     {
         int tagId = 0;
-        string type = "";
+        string type = "гл";
+        var outputValue = new List<SLexemOutput>();
         foreach (var morph in morphs)
         {
-            if (morph.BestTag.ToString().Split(',').First() == "гл") type = "инф_гл"; // лажа
-            else type = "гл";
-            tagId++;
+
+            var lemma = morph.BestTag.Lemma;
+            var p = morph.BestTag.Grams.ToList();
+
             var tasks = new[]
             {
-                new InflectTask(morph.Text,
-                    _morphAnalyzer.TagHelper.CreateTag(morph.BestTag.ToString().Split(',').First()),
-                    _morphAnalyzer.TagHelper.CreateTag(type, nmbr: "ед", tens: "буд", pers: "1л", mood: "изъяв")),
+                new InflectTask(lemma,
+                    _morphAnalyzer.TagHelper.CreateTag("инф_гл"),
+                    _morphAnalyzer.TagHelper.CreateTag(type, nmbr: "ед", tens: "буд", pers: "3л", mood: "изъяв")),
                 //гл,мн,прош,изъяв
-                new InflectTask(morph.Text,
-                    _morphAnalyzer.TagHelper.CreateTag(morph.BestTag.ToString().Split(',').First()),
+                new InflectTask(lemma,
+                    _morphAnalyzer.TagHelper.CreateTag("инф_гл"),
                     _morphAnalyzer.TagHelper.CreateTag(type, nmbr: "мн", tens: "прош",  mood: "изъяв")),
                 //гл,муж,ед,прош,изъяв
-                new InflectTask(morph.Text,
-                    _morphAnalyzer.TagHelper.CreateTag(morph.BestTag.ToString().Split(',').First()),
+                new InflectTask(lemma,
+                    _morphAnalyzer.TagHelper.CreateTag("инф_гл"),
                     _morphAnalyzer.TagHelper.CreateTag(type, gndr: "муж", nmbr: "ед", tens: "прош",  mood: "изъяв")),
 
-
             };
-            //Console.WriteLine(_morphAnalyzer.Inflect(tasks).First());
-            var results = _morphAnalyzer.Inflect(tasks);
-            foreach (var result in results)
+
+            var results = _morphAnalyzer.Inflect(tasks).ToList();
+            outputValue.Add(new SLexemOutput()
             {
-                Console.WriteLine(result);
-                Console.WriteLine("======================");
-            }
+                Value = morph.Text,
+                Infinity = lemma,
+                Variants = results
+            });
         }
 
-        return "  ";
+        return outputValue;
     }
 
 
