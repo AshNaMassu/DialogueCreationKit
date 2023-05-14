@@ -58,23 +58,23 @@
     }
 </style>
 
-@inject DialogueCreationModel Model
+@inject DialogueCreationModel _model
 @implements IDisposable
 
-@if (Model.Mode == DialogueCreateMode.Dialogue)
+@if (_model.Mode == DialogueCreateMode.Dialogue)
 {
-    <li class="message" id="@Message.Id" style="background: @(GetColor())">
-        <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
+    <li class="message" id="@Message.Id" style="background: @(GetColor())" @onclick=OnMessageClick>
+        <div draggable="true" @ondrop="e=>DragAndDropManager.OnDrop(_model, e, Message.Id)" @ondragstart="e=>DragAndDropManager.OnDragStart(e, Message.Id)" ondragover="event.preventDefault()">
             <div class="header">
                 <Avatar Style=@(_isActor ? colorAvatar0 : colorAvatar1) Class="avatar">
                     @(
-                        _isActor ? Model.ActorName[0] : Model.Companion.Name[0]
+                        _isActor ? _model.ActorName[0] : _model.Companion.Name[0]
                         )
                 </Avatar>
                 <div class="title">
                     <h4 class="name ml-8">
                         @(
-                            _isActor ? Model.ActorName : Model.Companion.Name
+                            _isActor ? _model.ActorName : _model.Companion.Name
                             )
                     </h4>
                     @if (_stage.Stage == DialogueStage.Content && _isActor && Message.Id > 3)
@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div>
-                @Message.Message
+                <TextArea AutoSize MaxRows="2" Value="@Message.Message" DebounceMilliseconds="100" OnChange="OnMessageChanged" />
             </div>
         </div>
     </li>
@@ -92,9 +92,9 @@
 else
 {
     <li class="message" id="@Message.Id" style="background: #ffffff">
-        <div draggable="true" @ondrop="@OnDrop" @ondragstart="@OnDragStart" ondragover="event.preventDefault()">
+        <div draggable="true" @ondrop="e=>DragAndDropManager.OnDrop(_model, e, Message.Id)" @ondragstart="e=>DragAndDropManager.OnDragStart(e, Message.Id)" ondragover="event.preventDefault()">
             <div>
-                @Message.Message
+                <TextArea AutoSize MaxRows="2" Value="@Message.Message" DebounceMilliseconds="100" OnChange="OnMessageChanged" />
             </div>
         </div>
     </li>
@@ -126,20 +126,31 @@ else
     private DialogueStageView _stage { get; set; }
 
     [Parameter]
+    public EventCallback OnMessageClick { get; set; }
+
+    [Parameter]
     public DialogueMessageView Message { get; set; }
-    [Parameter]
-    public EventCallback<DragEventArgs> OnDrop { get; set; }
-    [Parameter]
-    public EventCallback<DragEventArgs> OnDragStart { get; set; }
 
     private void UpdateTheme()
     {
-        DialogueCreationManager.UpdateTheme(Model, true);
+        DialogueCreationManager.UpdateTheme(_model, true);
+    }
+
+    private void OnMessageChanged(string value)
+    {
+        if (!Message.Message.Equals(value))
+        {
+            Message.Message = value;
+            _model.ListMessages[Message.Id] = Message;
+            _model.Content = "- " + string.Join("\n- ", _model.ListMessages.Select(x => x.Message));
+            DialogueCreationManager.CreateMessageList(_model);
+            _model.OnUpdateAll();
+        }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        _stage = Model.ListStage[Message.Id];
+        _stage = _model.ListStage[Message.Id];
         _stage.OnUpdateThemeEvent += UpdateTheme;
         await base.OnInitializedAsync();
     }

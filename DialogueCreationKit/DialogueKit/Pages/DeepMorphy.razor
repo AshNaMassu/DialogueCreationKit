@@ -1,7 +1,89 @@
 ﻿@page "/deepmorphy"
+@using DialogueCreationKit.DialogueKit.Components
+@using DialogueCreationKit.DialogueKit.Enums;
+@using DialogueCreationKit.DialogueKit.Models.View;
+@using DialogueCreationKit.DialogueKit.Managers;
 
-<h3>DeepMorphy</h3>
+@inject DialogueCreationModel _model
+@implements IDisposable
+
+<style>
+    .grid-row {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+        .grid-row.main {
+            height: 100%;
+        }
+
+    .grid-col-main {
+        background-color: #0000ff05;
+        padding-left: 16px;
+        padding-right: 16px;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+</style>
+
+<GridRow Class="grid-row main">
+    <!--main-->
+
+    <GridCol Span="12" Class="grid-col-main">
+        @if (_model.ListMessages != null && _model.ListMessages.Count > 0)
+        {
+            <GridRow Class="grid-row ">
+                <GridCol Span="24">
+                    <Button Block Icon="@IconType.Outline.Download">Скачать диалог</Button>
+                </GridCol>
+            </GridRow>
+            <GridRow Class="grid-row ">
+                <GridCol Flex=@("auto")>
+                    <AntList DataSource="@_model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
+                        <ChildContent Context="item" >
+                            <MessageView Message=@item OnMessageClick="()=> {SelectedMessage = item;}" />
+                        </ChildContent>
+                    </AntList>
+                </GridCol>
+            </GridRow>
+            <GridRow Class="grid-row ">
+                <GridCol Span="24">
+                    <Button Block Icon="@IconType.Outline.Download">Скачать диалог</Button>
+                </GridCol>
+            </GridRow>
+        }
+    </GridCol>
+
+    <GridCol Span="12" Class="grid-col-main">
+        <!--col 0-->
+        <AntList DataSource="new List<DialogueMessageView> {SelectedMessage}" ItemLayout="@ListItemLayout.Vertical">
+            <MessageEditing Message="@context" />
+        </AntList>
+        <!--col 0-->
+    </GridCol>
+<!--main-->
+</GridRow>
 
 @code {
 
+    [Parameter]
+    public DialogueMessageView SelectedMessage { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        _model.OnUpdateAllEvent += Refresh;
+
+        return base.OnInitializedAsync();
+    }
+
+    private void Refresh()
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        _model.OnUpdateAllEvent -= Refresh;
+    }
 }

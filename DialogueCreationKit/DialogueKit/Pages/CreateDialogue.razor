@@ -15,9 +15,9 @@
         padding-bottom: 8px;
     }
 
-        .grid-row.main {
-            height: 100%;
-        }
+    .grid-row.main {
+        height: 100%;
+    }
 
     .grid-col-main {
         background-color: #0000ff05;
@@ -30,7 +30,7 @@
 </style>
 
 @inject IJSRuntime JSRuntime
-@inject DialogueCreationModel Model
+@inject DialogueCreationModel _model
 @implements IDisposable
 
 <GridRow Class="grid-row main">
@@ -39,7 +39,7 @@
         <!--col 0-->
         <GridRow Class="grid-row ">
             <GridCol Span="12">
-                <Select @bind-Value="@Model.Mode"
+                <Select @bind-Value="@_model.Mode"
                         DefaultValue="@DialogueCreateMode.Dialogue"
                         TItemValue="DialogueCreateMode"
                         TItem="string" >
@@ -53,7 +53,7 @@
             <GridCol Flex=@("16px") />
 
             <GridCol Span="8">
-                <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => DialogueCreationManager.CreateMessageList(Model))">Обновить</Button>
+                <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => DialogueCreationManager.CreateMessageList(_model))">Обновить</Button>
             </GridCol>
 
         </GridRow>
@@ -61,22 +61,22 @@
        
         <GridRow Class="grid-row ">
             <GridCol Flex=@("auto")>
-                @if (Model != null)
+                @if (_model != null)
                 {
                     <GridRow Class="grid-row ">
                         <GridCol Span=4>
-                            @(Model.Mode == DialogueCreateMode.Dialogue ? "Главный герой" : "Имя файла")
+                            @(_model.Mode == DialogueCreateMode.Dialogue ? "Главный герой" : "Имя файла")
                         </GridCol>
                     </GridRow>
 
                     <GridRow Class="grid-row ">
                         <GridCol Span="12">
-                                <Input @bind-Value="@Model.ActorName" Placeholder="Имя" />
+                            <Input @bind-Value="@_model.ActorName" Placeholder="Имя" />
                             </GridCol>
                         </GridRow>
                 }
 
-                @if (Model.Mode == DialogueCreateMode.Dialogue && Model.Companion != null)
+                @if (_model.Mode == DialogueCreateMode.Dialogue && _model.Companion != null)
                 {
                     <GridRow Class="grid-row ">
                         <GridCol Span=4>
@@ -86,17 +86,17 @@
 
                     <GridRow Class="grid-row ">
                        <GridCol Span="12">
-                           <Input @bind-Value="@Model.Companion.Name" Placeholder="Имя" />
+                            <Input @bind-Value="@_model.Companion.Name" Placeholder="Имя" />
                        </GridCol>
                     </GridRow>
 
                     <GridRow Class="grid-row ">
                        <GridCol Span="12">
-                          <Input @bind-Value="@Model.Companion.Id" Placeholder="@Guid.Empty.ToString()" />
+                          <Input @bind-Value="@_model.Companion.Id" Placeholder="@Guid.Empty.ToString()" />
                        </GridCol>
                        <GridCol Flex=@("16px") />
                        <GridCol Span="8">
-                             <Button OnClick="@(() => Model.Companion.Id = Guid.NewGuid())">Сгенерировать</Button>
+                            <Button OnClick="@(() => _model.Companion.Id = Guid.NewGuid())">Сгенерировать</Button>
                        </GridCol>
                     </GridRow>
                 }
@@ -113,12 +113,12 @@
             
                 <GridRow Class="grid-row ">
                     <GridCol Flex=@("auto")>
-                        <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="15" Value="@Model.Content" DebounceMilliseconds="100" OnChange="OnContentChanged" />
+                        <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="15" Value="@_model.Content" DebounceMilliseconds="100" OnChange="OnContentChanged" />
                     </GridCol>
                 </GridRow>
                 <GridRow Class="grid-row ">
                     <GridCol Span="24">
-                        <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => DialogueCreationManager.CreateMessageList(Model))">Обновить</Button>
+                        <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => DialogueCreationManager.CreateMessageList(_model))">Обновить</Button>
                     </GridCol>
                 </GridRow>
             </GridCol>
@@ -127,25 +127,25 @@
     </GridCol>
 
     <GridCol Span="12" Class="grid-col-main">
-        @if (Model.ListMessages != null && Model.ListMessages.Count > 0)
+        @if (_model.ListMessages != null && _model.ListMessages.Count > 0)
         {
             <GridRow Class="grid-row ">
                 <GridCol Span="24">
-                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(JSRuntime, Model))">Скачать диалог</Button>
+                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(JSRuntime, _model))">Скачать диалог</Button>
                 </GridCol>
             </GridRow>
             <GridRow Class="grid-row ">
                 <GridCol Flex=@("auto")>
-                <AntList DataSource="@Model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
-                    <ChildContent Context="item">
-                        <MessageView Message=@item OnDrop="e=>OnDrop(e, item.Id)" OnDragStart="e=>OnDragStart(e, item.Id)" />
-                    </ChildContent>
-                </AntList>
-            </GridCol>
+                    <AntList DataSource="@_model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
+                        <ChildContent Context="item">
+                            <MessageView Message=@item />
+                        </ChildContent>
+                    </AntList>
+                </GridCol>
             </GridRow>
             <GridRow Class="grid-row ">
                 <GridCol Span="24">
-                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(JSRuntime, Model))">Скачать диалог</Button>
+                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(JSRuntime, _model))">Скачать диалог</Button>
                 </GridCol>
             </GridRow>
         }
@@ -156,8 +156,8 @@
 @code {
     protected override Task OnInitializedAsync()
     {
-        Model.Content = _content;
-        Model.OnUpdateAllEvent += Refresh;
+        _model.Content = _content;
+        _model.OnUpdateAllEvent += Refresh;
 
         return base.OnInitializedAsync();
     }
@@ -169,11 +169,11 @@
 
     private void OnContentChanged(string value)
     {
-        if (!Model.Content.Equals(value))
+        if (!_model.Content.Equals(value))
         {
-            Model.Content = value;
+            _model.Content = value;
 
-            DialogueCreationManager.CreateMessageList(Model);
+            DialogueCreationManager.CreateMessageList(_model);
         }
     }
 
@@ -193,38 +193,8 @@
         "- ага, ладно, пока" + Environment.NewLine +
         "- удачи";
 
-
-    private int? _dragging;
-
-    void OnDrop(DragEventArgs e, int? s)
-    {
-        if (s.HasValue && _dragging.HasValue)
-        {
-            var tempDrag = Model.ListMessages[_dragging.Value];
-            var tempCurrent = Model.ListMessages[s.Value];
-
-            Model.ListMessages[s.Value] = tempDrag;
-            Model.ListMessages[_dragging.Value] = tempCurrent;
-
-            _dragging = null;
-
-            Model.Content = "- " + string.Join("\n- ", Model.ListMessages.Select(x => x.Message));
-
-            DialogueCreationManager.CreateMessageList(Model);
-
-            StateHasChanged();
-        }
-    }
-
-    void OnDragStart(DragEventArgs e, int? s)
-    {
-        e.DataTransfer.DropEffect = "move";
-        e.DataTransfer.EffectAllowed = "move";
-        _dragging = s;
-    }
-
     public void Dispose()
     {
-        Model.OnUpdateAllEvent -= Refresh;
+        _model.OnUpdateAllEvent -= Refresh;
     }
 }

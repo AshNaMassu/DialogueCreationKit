@@ -1,0 +1,37 @@
+﻿using DialogueCreationKit.DialogueKit.Models.View;
+using Microsoft.AspNetCore.Components.Web;
+
+namespace DialogueCreationKit.DialogueKit.Managers
+{
+    public static class DragAndDropManager
+    {
+        private static int? _dragging;
+
+        public static void OnDrop(DialogueCreationModel model, DragEventArgs e, int? s)
+        {
+            if (s.HasValue && _dragging.HasValue)
+            {
+                var tempDrag = model.ListMessages[_dragging.Value];
+                var tempCurrent = model.ListMessages[s.Value];
+
+                model.ListMessages[s.Value] = tempDrag;
+                model.ListMessages[_dragging.Value] = tempCurrent;
+
+                _dragging = null;
+
+                model.Content = "- " + string.Join("\n- ", model.ListMessages.Select(x => x.Message));
+
+                DialogueCreationManager.CreateMessageList(model);
+
+                model.OnUpdateAll();
+            }
+        }
+
+        public static void OnDragStart(DragEventArgs e, int? s)
+        {
+            e.DataTransfer.DropEffect = "move";
+            e.DataTransfer.EffectAllowed = "move";
+            _dragging = s;
+        }
+    }
+}

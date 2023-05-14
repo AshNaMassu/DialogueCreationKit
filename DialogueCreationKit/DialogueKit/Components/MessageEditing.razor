@@ -1,0 +1,58 @@
+﻿@using DialogueCreationKit.DialogueKit.Models.View;
+@using DialogueCreationKit.DialogueKit.Models;
+
+
+@if (Message != null && Message.Id % 2 == 0)
+{
+    <GridRow Class="grid-row ">
+        <GridCol Flex=@("auto")>
+            <MessageView Message="@Message" />
+        </GridCol>
+            
+
+    @if (Checks != null)
+    {
+            foreach (var check in Checks)
+            {
+                <GridRow Class="grid-row ">
+                    <GridCol Flex=@("auto")>
+                        @check.Value
+                    </GridCol>
+                </GridRow>
+
+                <GridRow Class="grid-row ">
+                    <GridCol Flex=@("auto")>
+                        @check.Infinitive
+                    </GridCol>
+                </GridRow>
+
+                @if (check.Variants != null)
+                {
+                    foreach (var variant in check.Variants)
+                    {
+                        <GridRow Class="grid-row ">
+                            <GridCol Flex=@("auto")>
+                                @variant
+                            </GridCol>
+                        </GridRow>
+                    }
+                }
+            }
+        }
+
+    </GridRow>
+}
+
+
+@code {
+    [Parameter]
+    public DialogueMessageView Message { get; set; }
+
+    public List<DialogueMessageCheck> Checks { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Checks = new List<DialogueMessageCheck>();
+        await base.OnInitializedAsync();
+    }
+}

@@ -7,28 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="DialogueKit\Pages\DeepMorphy.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AntDesign" Version="0.14.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="DialogueKit\Validators\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="DialogueKit\Pages\DeepMorphy.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="DialogueKit\Pages\DeepMorphy.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="DialogueKit\Pages\DeepMorphy.razor" />
   </ItemGroup>
 
 </Project>
