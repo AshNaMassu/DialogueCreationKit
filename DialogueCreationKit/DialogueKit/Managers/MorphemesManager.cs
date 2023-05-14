@@ -71,7 +71,7 @@ public static class MorphemesManager
                     _morphAnalyzer.TagHelper.CreateTag(type, gndr: "муж", nmbr: "ед", tens: "прош",  mood: "изъяв")),
 
             };
-
+            ///TODO  добавить проверку на повторения (есть вероятность что исходный глагол совпадет с новыми формами)
             outputValue.Add(new SLexemOutput()
             {
                 Value = morph.Text,
