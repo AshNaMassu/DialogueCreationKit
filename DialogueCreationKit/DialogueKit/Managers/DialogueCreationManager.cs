@@ -196,12 +196,12 @@ namespace DialogueCreationKit.DialogueKit.Managers
                 tree.End = nodes.FirstOrDefault(x => x.Stage == DialogueStage.End).Id;
 
                 DialogueStorage storage = new DialogueStorage() { Nodes = nodes, Tree = tree };
-
+                storage.ActorName = model.ActorName;
                 //var jsonNodes = JsonConvert.SerializeObject(nodes);
                 //await DownloadFile(js, tree.Npc.Name + "_" + tree.Id.ToString() + ".nodes_json", jsonNodes);
 
                 var jsonStorage = JsonConvert.SerializeObject(storage);
-                await DownloadFile(js, tree.Npc.Name + "_" + tree.Id.ToString() + ".storage_json", jsonStorage);
+                await DownloadFile(js, tree.Npc.Name + "_" + tree.Npc.Id.ToString() + ".storage_json", jsonStorage);
             }
         }
 

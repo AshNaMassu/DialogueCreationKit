@@ -3,7 +3,7 @@
     [Serializable]
     public class DialogueTree
     {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
         public Npc Npc { get; set; }
         public Guid Begin { get; set; }
         public List<Guid> Content { get; set; }
@@ -11,7 +11,7 @@
 
         public DialogueTree()
         {
-            Id = Guid.NewGuid();
+           // Id = Guid.NewGuid();
             Npc = new Npc();
             Content = new List<Guid>();
         }
