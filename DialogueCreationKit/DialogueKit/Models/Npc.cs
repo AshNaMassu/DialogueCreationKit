@@ -14,5 +14,10 @@ namespace DialogueCreationKit.DialogueKit.Models
             Id = Guid.NewGuid();
             Name = "ABCDEF"[new Random().Next(0, 6)].ToString();
         }
+
+        public override string ToString()
+        {
+            return Name + $" ({Id})";
+        }
     }
 }

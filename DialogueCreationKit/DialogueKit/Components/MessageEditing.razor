@@ -2,57 +2,75 @@
 @using DialogueCreationKit.DialogueKit.Models;
 
 
-@if (Message != null && Message.Id % 2 == 0)
+@if (Message != null && Message.Message.Id % 2 == 0)
 {
-    <GridRow Class="grid-row ">
+    <GridRow Class="grid-row">
         <GridCol Flex=@("auto")>
-            <MessageView Message="@Message" />
+            <MessageView Message="@Message.Message" IsNeedChecked="false" />
         </GridCol>
-            
+    </GridRow>
 
-    @if (Checks != null)
+    @if (Message.Checks != null)
     {
-            foreach (var check in Checks)
+        foreach (var check in Message.Checks)
+        {
+            <GridRow Class="grid-row ">
+                <GridCol Flex=@("auto")>
+                    <h4>Формы глагола: @check.Value</h4>
+                </GridCol>
+            </GridRow>
+
+            <GridRow Class="grid-row ">
+                <GridCol Flex=@("auto")>
+                    <Checkbox @bind-Checked=@check.IsInfinitive>Изначально инфинитив</Checkbox>
+                </GridCol>
+            </GridRow>
+
+            <GridRow Class="grid-row ">
+                <GridCol Span="4">
+                    Инфинитив: 
+                </GridCol>
+                <GridCol Flex=@("auto")>
+                    <Input @bind-Value="@check.Infinitive" />
+                </GridCol>
+            </GridRow>
+
+            @if (check.Variants != null)
             {
-                <GridRow Class="grid-row ">
-                    <GridCol Flex=@("auto")>
-                        @check.Value
-                    </GridCol>
-                </GridRow>
-
-                <GridRow Class="grid-row ">
-                    <GridCol Flex=@("auto")>
-                        @check.Infinitive
-                    </GridCol>
-                </GridRow>
-
-                @if (check.Variants != null)
+                foreach (var variant in check.Variants)
                 {
-                    foreach (var variant in check.Variants)
-                    {
-                        <GridRow Class="grid-row ">
-                            <GridCol Flex=@("auto")>
-                                @variant
-                            </GridCol>
-                        </GridRow>
-                    }
+                    <GridRow Class="grid-row ">
+                        <GridCol Span="4">
+                            Вариант: 
+                        </GridCol>
+                        <GridCol Flex=@("auto")>
+                            <Input Value="@variant.Value" />
+                        </GridCol>
+                    </GridRow>
                 }
+
+                <GridRow Class="grid-row ">
+                    <GridCol Flex=@("auto")>
+                        <Button Block Icon="plus" OnClick="() => check.Variants.Add(new Variant(null))">Добавить свой вариант</Button>
+                    </GridCol>
+                        <GridCol Flex=@("auto")>
+                        <Button Block Icon="delete" Disabled=@(check.Variants.Count < 2) OnClick="() => check.Variants.RemoveAt(check.Variants.Count - 2)">Добавить свой вариант</Button>
+                        </GridCol>
+                </GridRow>
             }
         }
-
-    </GridRow>
+    }
 }
 
 
 @code {
     [Parameter]
-    public DialogueMessageView Message { get; set; }
-
-    public List<DialogueMessageCheck> Checks { get; set; }
+    public DialogueMessageCheckView Message { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Checks = new List<DialogueMessageCheck>();
         await base.OnInitializedAsync();
     }
+
+
 }

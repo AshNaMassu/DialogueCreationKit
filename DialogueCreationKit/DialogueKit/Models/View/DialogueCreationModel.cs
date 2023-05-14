@@ -11,7 +11,11 @@ namespace DialogueCreationKit.DialogueKit.Models.View
         public string Content { get; set; }
         public DialogueCreateMode Mode { get; set; }
 
+        public bool IsEmptyListMessages => (ListMessages == null || ListMessages.Count == 0);
+        public bool IsEmptyListMessagesMorphy => (ListMessagesMorphy == null || ListMessagesMorphy.Count == 0);
+
         public List<DialogueMessageView> ListMessages { get; set; }
+        public List<DialogueMessageCheckView> ListMessagesMorphy { get; set; }
         public List<DialogueStageView> ListStage { get; set; }
 
         public event Action OnUpdateAllEvent;
@@ -30,6 +34,7 @@ namespace DialogueCreationKit.DialogueKit.Models.View
             Content = string.Empty;
             Mode = DialogueCreateMode.Dialogue;
             ListMessages = new List<DialogueMessageView>();
+            ListMessagesMorphy = new List<DialogueMessageCheckView>();
             ListStage = new List<DialogueStageView>();
         }
     }

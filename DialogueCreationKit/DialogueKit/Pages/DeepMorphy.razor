@@ -1,10 +1,12 @@
 ﻿@page "/deepmorphy"
 @using DialogueCreationKit.DialogueKit.Components
 @using DialogueCreationKit.DialogueKit.Enums;
+@using DialogueCreationKit.DialogueKit.Helpers;
 @using DialogueCreationKit.DialogueKit.Models.View;
 @using DialogueCreationKit.DialogueKit.Managers;
 
 @inject DialogueCreationModel _model
+@inject IJSRuntime _js 
 @implements IDisposable
 
 <style>
@@ -31,25 +33,28 @@
     <!--main-->
 
     <GridCol Span="12" Class="grid-col-main">
-        @if (_model.ListMessages != null && _model.ListMessages.Count > 0)
+        
+        <GridRow Class="grid-row ">
+            <GridCol Flex=@("auto")>
+                <Button Block Disabled=@(_model.IsEmptyListMessages) OnClick="FindVerb">Определить или обновить глаголы</Button>
+            </GridCol>
+                <GridCol Flex=@("auto")>
+                <Button Block Disabled=@(!(_model.ListMessagesMorphy.Where( x => x.Checks != null && x.Checks.Count > 0).Count() > 0)) OnClick="CreateMorphy">Создать проверочные выражения</Button>
+            </GridCol>
+                <GridCol Flex=@("auto")>
+                <Button Block Disabled=@(_model.ListMessagesMorphy == null || _model.ListMessagesMorphy.Count == 0) OnClick="()=>{DialogueCreationManager.SerializeMorphy(_js, _model);}">Сериализовать и скачать</Button>
+            </GridCol>
+        </GridRow>
+
+        @if (_model.ListMessagesMorphy != null && _model.ListMessagesMorphy.Count > 0)
         {
             <GridRow Class="grid-row ">
-                <GridCol Span="24">
-                    <Button Block Icon="@IconType.Outline.Download">Скачать диалог</Button>
-                </GridCol>
-            </GridRow>
-            <GridRow Class="grid-row ">
                 <GridCol Flex=@("auto")>
-                    <AntList DataSource="@_model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
+                    <AntList DataSource="@_model.ListMessagesMorphy" ItemLayout="@ListItemLayout.Vertical">
                         <ChildContent Context="item" >
-                            <MessageView Message=@item OnMessageClick="()=> {SelectedMessage = item;}" />
+                            <MessageView Message=@item.Message OnMessageClick="()=> {SelectedMessage = item;}" IsNeedChecked="false" />
                         </ChildContent>
                     </AntList>
-                </GridCol>
-            </GridRow>
-            <GridRow Class="grid-row ">
-                <GridCol Span="24">
-                    <Button Block Icon="@IconType.Outline.Download">Скачать диалог</Button>
                 </GridCol>
             </GridRow>
         }
@@ -57,18 +62,30 @@
 
     <GridCol Span="12" Class="grid-col-main">
         <!--col 0-->
-        <AntList DataSource="new List<DialogueMessageView> {SelectedMessage}" ItemLayout="@ListItemLayout.Vertical">
-            <MessageEditing Message="@context" />
-        </AntList>
+        <GridRow Class="grid-row ">
+            <GridCol Span="24">
+                <Button Disabled=@(SelectedMessage == null || SelectedMessage.Message.Id % 2 != 0) Block OnClick="Editing">Преобразовать</Button>
+            </GridCol>
+        </GridRow>
+
+        <GridRow Class="grid-row ">
+            <GridCol Span="24">
+                <AntList DataSource="new List<DialogueMessageCheckView> {SelectedMessage}" ItemLayout="@ListItemLayout.Vertical">
+                    <MessageEditing Message="@context" />
+                </AntList>
+            </GridCol>
+        </GridRow>
         <!--col 0-->
     </GridCol>
 <!--main-->
 </GridRow>
 
-@code {
+                @code {
 
     [Parameter]
-    public DialogueMessageView SelectedMessage { get; set; }
+    public DialogueMessageCheckView SelectedMessage { get; set; }
+
+    private bool IsWorking { get; set; }
 
     protected override Task OnInitializedAsync()
     {
@@ -85,5 +102,71 @@
     public void Dispose()
     {
         _model.OnUpdateAllEvent -= Refresh;
+    }
+
+    private void Editing()
+    {
+        var resp = MorphemesManager.WordsInitializer(SelectedMessage.Message.Message);
+    }
+
+    private void FindVerb()
+    {
+
+        DialogueCreationManager.CreateMorphyFromMessages(_model);
+
+        foreach (var message in _model.ListMessagesMorphy)
+        {
+            if (message.Message.Id % 2 == 0)
+            {
+                var resp = MorphemesManager.WordsInitializer(message.Message.Message);
+
+                if (resp.Status && MorphemesManager.Words != null && MorphemesManager.Words.Count != 0)
+                {
+                    foreach (var word in MorphemesManager.Words)
+                    {
+                        var indexOf = message.Message.Message.IndexOf(word.Value);
+
+                        if (indexOf == 0 || message.Message.Message[indexOf - 1] != '#')
+                        {
+                            message.Message.Message = message.Message.Message.Replace(word.Value, $"#{word.Value}");
+                        }
+                    }
+                }
+
+                var split = message.Message.Message.Split(' ');
+                message.Checks = new();
+
+                foreach (var w in split)
+                {
+                    if (w.Length > 0 && w[0] == '#')
+                    {
+                        var vlue = w.RemoveExtraSpaces();
+
+                        var m = MorphemesManager.Words.FirstOrDefault(x => x.Value.Equals(vlue));
+                        if (m != null)
+                        {
+                            message.Checks.Add(new Models.DialogueMessageCheck() { Value = m.Value, IsInfinitive = m.IsInfinitive });
+                        }
+                        else
+                        {
+                            message.Checks.Add(new Models.DialogueMessageCheck() { Value = vlue });
+                        }
+                    }
+                }
+            }
+        }
+
+        StateHasChanged();
+    }
+
+    private void CreateMorphy()
+    {
+        foreach (var message in _model.ListMessagesMorphy)
+        {
+            if (message.Checks.Count > 0)
+            {
+                MorphemesManager.GetMessageWithOptions(message.Checks);
+            }
+        }
     }
 }

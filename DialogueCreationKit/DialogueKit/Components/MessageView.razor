@@ -77,14 +77,14 @@
                             _isActor ? _model.ActorName : _model.Companion.Name
                             )
                     </h4>
-                    @if (_stage.Stage == DialogueStage.Content && _isActor && Message.Id > 3)
+                    @if (IsNeedChecked && _stage.Stage == DialogueStage.Content && _isActor && Message.Id > 3)
                     {
                         <Checkbox @bind-Checked=@_stage.IsNewTheme>Новая тема</Checkbox>
                     }
                 </div>
             </div>
             <div>
-                <TextArea AutoSize MaxRows="2" Value="@Message.Message" DebounceMilliseconds="100" OnChange="OnMessageChanged" />
+                <TextArea AutoSize MaxRows="2" Value="@Message.Message" DebounceMilliseconds="10" OnChange="OnMessageChanged" />
             </div>
         </div>
     </li>
@@ -94,7 +94,7 @@ else
     <li class="message" id="@Message.Id" style="background: #ffffff">
         <div draggable="true" @ondrop="e=>DragAndDropManager.OnDrop(_model, e, Message.Id)" @ondragstart="e=>DragAndDropManager.OnDragStart(e, Message.Id)" ondragover="event.preventDefault()">
             <div>
-                <TextArea AutoSize MaxRows="2" Value="@Message.Message" DebounceMilliseconds="100" OnChange="OnMessageChanged" />
+                <TextArea AutoSize MaxRows="2" Value="@Message.Message" DebounceMilliseconds="10" OnChange="OnMessageChanged" />
             </div>
         </div>
     </li>
@@ -130,6 +130,9 @@ else
 
     [Parameter]
     public DialogueMessageView Message { get; set; }
+
+    [Parameter]
+    public bool IsNeedChecked { get; set; } = true;
 
     private void UpdateTheme()
     {

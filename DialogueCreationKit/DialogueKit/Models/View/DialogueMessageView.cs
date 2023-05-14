@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿
 
 namespace DialogueCreationKit.DialogueKit.Models.View
 {
@@ -17,6 +17,15 @@ namespace DialogueCreationKit.DialogueKit.Models.View
         {
             Id = id;
             Message = message;
+        }
+
+        public DialogueMessageView Copy()
+        {
+            return new DialogueMessageView()
+            {
+                Id = Id,
+                Message = new string(Message.Select(x => x).ToArray())
+            };
         }
     }
 }

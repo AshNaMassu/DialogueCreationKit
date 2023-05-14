@@ -13,7 +13,7 @@ public static class StringExtensions
 
     public static string RemoveExtraSpaces(this string inputText)
     {
-        return Regex.Replace(inputText, @"\s+", " ").Trim().ToLower();
-
+        //return Regex.Replace(inputText, @"\s+", " ").Trim().ToLower();
+        return Regex.Replace(Regex.Replace(inputText, @"\W", " "), @"\s+", " ").Trim().ToLower();
     }
 }
