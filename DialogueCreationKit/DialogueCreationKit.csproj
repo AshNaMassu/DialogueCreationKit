@@ -8,10 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="AntDesign" Version="0.14.4" />
+    <PackageReference Include="DeepMorphy" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DialogueKit\Managers\Responses\" />
+    <Folder Include="DialogueKit\Helpers\" />
     <Folder Include="DialogueKit\Validators\" />
   </ItemGroup>
 
