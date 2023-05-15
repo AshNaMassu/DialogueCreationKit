@@ -44,7 +44,7 @@
                             Вариант: 
                         </GridCol>
                         <GridCol Flex=@("auto")>
-                            <Input Value="@variant.Value" />
+                            <Input @bind-Value="@variant.Value" />
                         </GridCol>
                     </GridRow>
                 }
