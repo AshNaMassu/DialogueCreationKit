@@ -98,7 +98,7 @@ public static class MorphemesManager
 
                 if (variants != null && variants.Count() != 0)
                 {
-                    check.Variants = variants.Select( x => new Variant(x)).ToList();
+                    check.VariantsValue = variants.Select( x => new Variant(x)).ToList();
                 }
             }
         }

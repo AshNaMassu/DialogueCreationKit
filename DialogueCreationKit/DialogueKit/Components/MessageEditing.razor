@@ -35,9 +35,9 @@
                 </GridCol>
             </GridRow>
 
-            @if (check.Variants != null)
+            @if (check.VariantsValue != null)
             {
-                foreach (var variant in check.Variants)
+                foreach (var variant in check.VariantsValue)
                 {
                     <GridRow Class="grid-row ">
                         <GridCol Span="4">
@@ -51,10 +51,10 @@
 
                 <GridRow Class="grid-row ">
                     <GridCol Flex=@("auto")>
-                        <Button Block Icon="plus" OnClick="() => check.Variants.Add(new Variant(null))">Добавить свой вариант</Button>
+                        <Button Block Icon="plus" OnClick="() => check.VariantsValue.Add(new Variant(null))">Добавить свой вариант</Button>
                     </GridCol>
                         <GridCol Flex=@("auto")>
-                        <Button Block Icon="delete" Disabled=@(check.Variants.Count < 2) OnClick="() => check.Variants.RemoveAt(check.Variants.Count - 2)">Добавить свой вариант</Button>
+                        <Button Block Icon="delete" Disabled=@(check.VariantsValue.Count < 2) OnClick="() => check.VariantsValue.RemoveAt(check.VariantsValue.Count - 2)">Добавить свой вариант</Button>
                         </GridCol>
                 </GridRow>
             }

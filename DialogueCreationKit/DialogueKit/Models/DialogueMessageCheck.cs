@@ -9,14 +9,18 @@ namespace DialogueCreationKit.DialogueKit.Models
         public bool IsInfinitive;
         public string Value { get; set; }   
         public string Infinitive { get; set; }
-        public List<Variant> Variants { get; set; }
+
+        [NonSerialized]
+        public List<Variant> VariantsValue;
+        
+        public List<string> Variants { get; set; }
 
         public DialogueMessageCheck() 
         {
             Id = Guid.NewGuid();
             Value = string.Empty;
             Infinitive = string.Empty;
-            Variants = new();
+            VariantsValue = new();
         }
     }
 

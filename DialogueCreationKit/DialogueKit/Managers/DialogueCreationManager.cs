@@ -290,9 +290,11 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
                 if (replace != null)
                 {
-                    replace.Message = replace.Message.Replace($"#{check.Value}", $"#{check.Id.ToString()}");
+                    replace.Message = replace.Message.Replace($"#{check.Value}", $"#{check.Id} ");
                     replace.IsCheckable = true;
                 }
+
+                check.Variants = check.VariantsValue.Where(x => !string.IsNullOrWhiteSpace(x.Value)).Select(x => x.Value).ToList();
             }
 
             DialogueStorage storage = new DialogueStorage() { Nodes = nodes, Tree = tree, Checks = checks };
