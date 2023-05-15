@@ -21,12 +21,6 @@
             </GridRow>
 
             <GridRow Class="grid-row ">
-                <GridCol Flex=@("auto")>
-                    <Checkbox @bind-Checked=@check.IsInfinitive>Изначально инфинитив</Checkbox>
-                </GridCol>
-            </GridRow>
-
-            <GridRow Class="grid-row ">
                 <GridCol Span="4">
                     Инфинитив: 
                 </GridCol>
@@ -44,7 +38,7 @@
                             Вариант: 
                         </GridCol>
                         <GridCol Flex=@("auto")>
-                            <Input Value="@variant.Value" />
+                            <Input @bind-Value="@variant.Value" />
                         </GridCol>
                     </GridRow>
                 }
@@ -54,7 +48,7 @@
                         <Button Block Icon="plus" OnClick="() => check.Variants.Add(new Variant(null))">Добавить свой вариант</Button>
                     </GridCol>
                         <GridCol Flex=@("auto")>
-                        <Button Block Icon="delete" Disabled=@(check.Variants.Count < 2) OnClick="() => check.Variants.RemoveAt(check.Variants.Count - 2)">Добавить свой вариант</Button>
+                        <Button Block Icon="delete" Disabled=@(check.Variants.Count < 2) OnClick="() => check.Variants.RemoveAt(check.Variants.Count - 2)">Удалить вариант</Button>
                         </GridCol>
                 </GridRow>
             }
