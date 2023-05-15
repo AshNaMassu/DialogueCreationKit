@@ -17,6 +17,13 @@ public class MorphInfoInfinitive
     public bool IsInfinitive { get; set;}
 }
 
+public struct SLexemOutput
+{
+    public string Value;
+    public string Infinity;
+    public List<string> Variants;
+}
+
 public static class MorphemesManager
 {
     private static string[] words;
