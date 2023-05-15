@@ -61,6 +61,44 @@ public static class MorphemesManager
         { Code = 0, Message = @"Инициализация успешна!", Status = true };
     }
 
+    public static List<SLexemOutput> GetMessageWithOptions(bool fairytaleFlag = false)
+    {
+        int tagId = 0;
+        string type = "гл";
+        var outputValue = new List<SLexemOutput>();
+        foreach (var morph in morphs)
+        {
+
+            var lemma = morph.BestTag.Lemma;
+            var p = morph.BestTag.Grams.ToList();
+
+            var tasks = new[]
+            {
+                new InflectTask(lemma,
+                    _morphAnalyzer.TagHelper.CreateTag("инф_гл"),
+                    _morphAnalyzer.TagHelper.CreateTag(type, nmbr: "ед", tens: "буд", pers: "3л", mood: "изъяв")),
+                //гл,мн,прош,изъяв
+                new InflectTask(lemma,
+                    _morphAnalyzer.TagHelper.CreateTag("инф_гл"),
+                    _morphAnalyzer.TagHelper.CreateTag(type, nmbr: "мн", tens: "прош",  mood: "изъяв")),
+                //гл,муж,ед,прош,изъяв
+                new InflectTask(lemma,
+                    _morphAnalyzer.TagHelper.CreateTag("инф_гл"),
+                    _morphAnalyzer.TagHelper.CreateTag(type, gndr: "муж", nmbr: "ед", tens: "прош",  mood: "изъяв")),
+
+            };
+            ///TODO  добавить проверку на повторения (есть вероятность что исходный глагол совпадет с новыми формами)
+            outputValue.Add(new SLexemOutput()
+            {
+                Value = morph.Text,
+                Infinity = lemma,
+                Variants = _morphAnalyzer.Inflect(tasks).ToList()
+            });
+        }
+
+        return outputValue;
+    }
+
     public static void GetMessageWithOptions(List<DialogueMessageCheck> checks)
     {
         foreach (var check in checks)
