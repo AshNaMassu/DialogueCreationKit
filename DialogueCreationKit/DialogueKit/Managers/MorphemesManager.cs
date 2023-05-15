@@ -22,7 +22,7 @@ public static class MorphemesManager
     private static string[] words;
     private static string originalSentence;
     private static List<MorphInfoInfinitive> morphs = new List<MorphInfoInfinitive>();
-    private static MorphAnalyzer _morphAnalyzer = new MorphAnalyzer();
+    private static MorphAnalyzer _morphAnalyzer = new MorphAnalyzer(true);
 
     public static string OriginalSentence => originalSentence;
     public static List<MorphInfoInfinitive> Words => morphs;
