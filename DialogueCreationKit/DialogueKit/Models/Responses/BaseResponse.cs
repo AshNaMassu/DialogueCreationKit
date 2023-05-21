@@ -1,4 +1,4 @@
-﻿namespace DialogueCreationKit.DialogueKit.Managers.Responses;
+﻿namespace DialogueCreationKit.DialogueKit.Models.Responses;
 
 public class BaseResponse
 {

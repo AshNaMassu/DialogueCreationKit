@@ -4,6 +4,7 @@
 @using DialogueCreationKit.DialogueKit.Helpers;
 @using DialogueCreationKit.DialogueKit.Models.View;
 @using DialogueCreationKit.DialogueKit.Managers;
+@using DialogueCreationKit.DialogueKit.Models;
 
 @inject DialogueCreationModel _model
 @inject IJSRuntime _js 
@@ -36,13 +37,13 @@
         
         <GridRow Class="grid-row ">
             <GridCol Flex=@("auto")>
-                <Button Block Disabled=@(_model.IsEmptyListMessages) OnClick="FindVerb">Определить или обновить глаголы</Button>
+                <Button Block Disabled=@(IsWorking || _model.IsEmptyListMessages) OnClick="VerbAnalizer">Анализировать сообщения</Button>
             </GridCol>
                 <GridCol Flex=@("auto")>
-                <Button Block Disabled=@(!(_model.ListMessagesMorphy.Where( x => x.Checks != null && x.Checks.Count > 0).Count() > 0)) OnClick="CreateMorphy">Создать проверочные выражения</Button>
+                <Button Block Disabled=@(IsWorking || !(_model.ListMessagesMorphy.Where( x => x.Checks != null && x.Checks.Count > 0).Count() > 0)) OnClick="CreateMorphy">Определение вариантов глаголов</Button>
             </GridCol>
                 <GridCol Flex=@("auto")>
-                <Button Block Disabled=@(_model.ListMessagesMorphy == null || _model.ListMessagesMorphy.Count == 0) OnClick="()=>{DialogueCreationManager.SerializeMorphy(_js, _model);}">Сериализовать и скачать</Button>
+                <Button Block Disabled=@(IsWorking || _model.ListMessagesMorphy == null || _model.ListMessagesMorphy.Count == 0) OnClick="()=>{DialogueCreationManager.SerializeMorphy(_js, _model);}">Сериализовать и скачать</Button>
             </GridCol>
         </GridRow>
 
@@ -64,12 +65,6 @@
         <!--col 0-->
         <GridRow Class="grid-row ">
             <GridCol Span="24">
-                <Button Disabled=@(SelectedMessage == null || SelectedMessage.Message.Id % 2 != 0) Block OnClick="Editing">Преобразовать</Button>
-            </GridCol>
-        </GridRow>
-
-        <GridRow Class="grid-row ">
-            <GridCol Span="24">
                 <AntList DataSource="new List<DialogueMessageCheckView> {SelectedMessage}" ItemLayout="@ListItemLayout.Vertical">
                     <MessageEditing Message="@context" />
                 </AntList>
@@ -80,7 +75,7 @@
 <!--main-->
 </GridRow>
 
-                @code {
+@code {
 
     [Parameter]
     public DialogueMessageCheckView SelectedMessage { get; set; }
@@ -89,6 +84,9 @@
 
     protected override Task OnInitializedAsync()
     {
+        if (_model.IsEmptyListMessagesMorphy)
+            DialogueCreationManager.CreateMorphyFromMessages(_model);
+
         _model.OnUpdateAllEvent += Refresh;
 
         return base.OnInitializedAsync();
@@ -106,56 +104,61 @@
 
     private void Editing()
     {
-        var resp = MorphemesManager.WordsInitializer(SelectedMessage.Message.Message);
+        // var resp = MorphemesManager.WordsInitializer(SelectedMessage.Message.Message);
     }
 
-    private void FindVerb()
+    private async Task VerbAnalizer()
     {
-
-        DialogueCreationManager.CreateMorphyFromMessages(_model);
+        IsWorking = true;
 
         foreach (var message in _model.ListMessagesMorphy)
         {
-            if (message.Message.Id % 2 == 0)
+            if (message.Message.Id % 2 == 0 && !string.IsNullOrWhiteSpace(message.Message.Message))
             {
-                var resp = MorphemesManager.WordsInitializer(message.Message.Message);
 
-                if (resp.Status && MorphemesManager.Words != null && MorphemesManager.Words.Count != 0)
+                var words = message.Message.Message.RemoveExtraSpacesAndToWord();
+
+                if (words == null && words.Length == 0) continue;
+
+                foreach (var word in words)
                 {
-                    foreach (var word in MorphemesManager.Words)
+                    if (string.IsNullOrWhiteSpace(word) || word.Length < 2) continue;
+
+                    DialogueMessageCheck checksTemp = null;
+
+                    if (word[0] == '#')
                     {
-                        var indexOf = message.Message.Message.IndexOf(word.Value);
+                        checksTemp = new() { Value = word.Substring(1, word.Length - 1) };
+                    }
+                    else
+                    {
+                        checksTemp = await MorphemesManager.WordsInitializer(word);
+
+                        if (!MorphemesManager.Status.Status || checksTemp == null) continue;
+
+                        var indexOf = message.Message.Message.IndexOf(word);
 
                         if (indexOf == 0 || message.Message.Message[indexOf - 1] != '#')
                         {
-                            message.Message.Message = message.Message.Message.Replace(word.Value, $"#{word.Value}");
-                        }
+                            message.Message.Message = message.Message.Message.Replace(word, $"#{word}");
+                        }    
                     }
-                }
 
-                var split = message.Message.Message.Split(' ');
-                message.Checks = new();
-
-                foreach (var w in split)
-                {
-                    if (w.Length > 0 && w[0] == '#')
+                    if (message.Checks == null)
                     {
-                        var vlue = w.RemoveExtraSpaces();
-
-                        var m = MorphemesManager.Words.FirstOrDefault(x => x.Value.Equals(vlue));
-                        if (m != null)
-                        {
-                            message.Checks.Add(new Models.DialogueMessageCheck() { Value = m.Value, IsInfinitive = m.IsInfinitive });
-                        }
-                        else
-                        {
-                            message.Checks.Add(new Models.DialogueMessageCheck() { Value = vlue });
-                        }
+                        message.Checks = new();
                     }
+
+
+                    var c = message.Checks.FirstOrDefault(x => x.Value.Equals(checksTemp.Value));
+
+                    if (c == null)
+                        message.Checks.Add(checksTemp);
                 }
             }
         }
 
+        IsWorking = false;
         StateHasChanged();
     }
 

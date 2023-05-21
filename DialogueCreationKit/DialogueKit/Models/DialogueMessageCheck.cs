@@ -5,8 +5,6 @@ namespace DialogueCreationKit.DialogueKit.Models
     public class DialogueMessageCheck
     {
         public Guid Id { get; set; }
-        [NonSerialized]
-        public bool IsInfinitive;
         public string Value { get; set; }   
         public string Infinitive { get; set; }
 

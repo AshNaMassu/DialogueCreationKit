@@ -1,5 +1,7 @@
 ﻿
 
+using DialogueCreationKit.DialogueKit.Helpers;
+
 namespace DialogueCreationKit.DialogueKit.Models.View
 {
     public class DialogueMessageView
@@ -24,7 +26,7 @@ namespace DialogueCreationKit.DialogueKit.Models.View
             return new DialogueMessageView()
             {
                 Id = Id,
-                Message = new string(Message.Select(x => x).ToArray())
+                Message = Message.Copy()
             };
         }
     }

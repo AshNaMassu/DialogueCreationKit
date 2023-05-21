@@ -34,6 +34,8 @@ namespace DialogueCreationKit.DialogueKit.Managers
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (string.IsNullOrWhiteSpace(model.Content)) return;// throw new ArgumentException(nameof(model));
 
+            model.ListMessagesMorphy = null;
+
             model.Content = model.Content.Replace("\r", "");
             var messages = model.Content.Split('\n');
 
@@ -284,8 +286,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
             foreach (var check in checks)
             {
-                if (check.IsInfinitive) check.Infinitive = check.Value;
-
+                //if (check.IsInfinitive) check.Infinitive = check.Value;
                 var replace = nodes.FirstOrDefault(x => x.Message.Contains($"#{check.Value}"));
 
                 if (replace != null)
