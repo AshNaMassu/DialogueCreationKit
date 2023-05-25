@@ -58,9 +58,6 @@
     }
 </style>
 
-@inject DialogueCreationModel _model
-@implements IDisposable
-
 @if (_model.Mode == DialogueCreateMode.Dialogue)
 {
     <li class="message" id="@Message.Id" style="background: @(GetColor())" @onclick=OnMessageClick>
@@ -77,7 +74,7 @@
                             _isActor ? _model.ActorName : _model.Companion.Name
                             )
                     </h4>
-                    @if (IsNeedChecked && _stage.Stage == DialogueStage.Content && _isActor && Message.Id > 3)
+                    @if (!IsCheckedMessageMode && _stage.Stage == DialogueStage.Content && _isActor && Message.Id > 3)
                     {
                         <Checkbox @bind-Checked=@_stage.IsNewTheme>Новая тема</Checkbox>
                     }
@@ -98,73 +95,4 @@ else
             </div>
         </div>
     </li>
-}
-
-
-@code {
-    private string colorAvatar0 = "background-color: #ff8080";
-    private string colorAvatar1 = "background-color: #8080ff";
-
-    private string colorBegin = "#b3efb7";
-    private string[] colorContent = { "#7FFFD4", "#9ACEEB" };
-    private string colorEnd = "#efbeb7";
-    private string colorDefault = "#ffffff";
-
-    private string GetColor()
-    {
-        return _stage.Stage switch
-        {
-            DialogueStage.Begin => colorBegin,
-            DialogueStage.Content => colorContent[_stage.IdTheme],
-            DialogueStage.End => colorEnd,
-            _ => colorDefault
-        };
-    }
-
-    private bool _isActor => Message.Id % 2 == 0;
-
-    private DialogueStageView _stage { get; set; }
-
-    [Parameter]
-    public EventCallback OnMessageClick { get; set; }
-
-    [Parameter]
-    public DialogueMessageView Message { get; set; }
-
-    [Parameter]
-    public bool IsNeedChecked { get; set; } = true;
-
-    private void UpdateTheme()
-    {
-        DialogueCreationManager.UpdateTheme(_model, true);
-    }
-
-    private void OnMessageChanged(string value)
-    {
-        if (!Message.Message.Equals(value))
-        {
-            Message.Message = value;
-            _model.ListMessages[Message.Id] = Message;
-            _model.Content = "- " + string.Join("\n- ", _model.ListMessages.Select(x => x.Message));
-            DialogueCreationManager.CreateMessageList(_model);
-            _model.OnUpdateAll();
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        _stage = _model.ListStage[Message.Id];
-        _stage.OnUpdateThemeEvent += UpdateTheme;
-        await base.OnInitializedAsync();
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        await base.OnParametersSetAsync();
-    }
-
-    public void Dispose()
-    {
-        _stage.OnUpdateThemeEvent -= UpdateTheme;        
-    }
 }

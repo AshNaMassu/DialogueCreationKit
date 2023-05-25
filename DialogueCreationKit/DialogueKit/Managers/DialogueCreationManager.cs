@@ -239,7 +239,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             List<DialogueNode> nodes = new List<DialogueNode>();
             List<DialogueMessageCheck> checks = new List<DialogueMessageCheck>();
 
-            messages.ForEach(x => nodes.Add(new DialogueNode() { Message = x.Message, Stage = stages[x.Id].Stage }));
+            messages.ForEach(x => nodes.Add(new DialogueNode() { Message = x.Message.Replace("$", ""), Stage = stages[x.Id].Stage }));
 
             nodes[0].Child = nodes[1].Id;
 

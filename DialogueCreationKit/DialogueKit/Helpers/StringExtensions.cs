@@ -25,6 +25,6 @@ public static class StringExtensions
 
     public static string[] RemoveExtraSpacesAndToWord(this string inputText)
     {
-        return Regex.Replace(Regex.Replace(inputText, @"[^а-яА-ЯёЁ#]", " "), @"\s+", " ").Trim().ToLower().Split(" ");
+        return Regex.Replace(Regex.Replace(inputText, @"[^а-яА-ЯёЁ#$]", " "), @"\s+", " ").Trim().ToLower().Split(" ");
     }
 }
