@@ -6,7 +6,7 @@
 {
     <GridRow Class="grid-row">
         <GridCol Flex=@("auto")>
-            <MessageView Message="@Message.Message" IsNeedChecked="false" />
+            <MessageView Message="@Message.Message" IsCheckedMessageMode />
         </GridCol>
     </GridRow>
 
@@ -48,7 +48,7 @@
                         <Button Block Icon="plus" OnClick="() => check.VariantsValue.Add(new Variant(null))">Добавить свой вариант</Button>
                     </GridCol>
                         <GridCol Flex=@("auto")>
-                        <Button Block Icon="delete" Disabled=@(check.VariantsValue.Count < 2) OnClick="() => check.VariantsValue.RemoveAt(check.VariantsValue.Count - 2)">Добавить свой вариант</Button>
+                        <Button Block Icon="delete" Disabled=@(check.VariantsValue.Count < 2) OnClick="() => check.VariantsValue.RemoveAt(check.VariantsValue.Count - 2)">Удалить свой вариант</Button>
                         </GridCol>
                 </GridRow>
             }
