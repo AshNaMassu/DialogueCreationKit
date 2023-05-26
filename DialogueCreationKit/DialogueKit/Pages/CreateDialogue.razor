@@ -187,7 +187,7 @@
 @code {
     protected override Task OnInitializedAsync()
     {
-        _model.Content = _content;
+        _model.Content = string.Empty;
         _model.OnUpdateAllEvent += Refresh;
 
         return base.OnInitializedAsync();
@@ -202,7 +202,7 @@
     {
         if (!_model.Content.Equals(value))
         {
-            _model.Content = value;
+            _model.Content = value == null ? string.Empty : value;
 
             DialogueCreationManager.CreateMessageList(_model);
         }
