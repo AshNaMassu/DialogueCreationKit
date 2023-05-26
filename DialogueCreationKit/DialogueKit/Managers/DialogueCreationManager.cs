@@ -16,7 +16,11 @@ namespace DialogueCreationKit.DialogueKit.Managers
         public static void CreateMorphyFromMessages(DialogueCreationModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
-            if (model.IsEmptyListMessages) throw new ArgumentException(nameof(model.ListMessages));
+            if (model.IsEmptyListMessages) //throw new ArgumentException(nameof(model.ListMessages));
+            {
+                Console.WriteLine($"model.IsEmptyListMessages - {model.IsEmptyListMessages}");
+                return;
+            }
 
             model.ListMessagesMorphy = model.ListMessages.Select( x => new DialogueMessageCheckView(x)).ToList();
         }
@@ -62,7 +66,10 @@ namespace DialogueCreationKit.DialogueKit.Managers
             if (model.ListMessages.Count > messages.Length)
                 model.ListMessages.RemoveAt(messages.Length);
 
-            CreateOrUpdateTheme(model);
+            if (model.Mode == DialogueCreateMode.Dialogue && model.ListMessages.Count > 2)
+                CreateOrUpdateTheme(model);
+            else
+                model.OnUpdateAll();
         }
 
         public static void CreateOrUpdateTheme(DialogueCreationModel model)

@@ -187,7 +187,9 @@
 @code {
     protected override Task OnInitializedAsync()
     {
-        _model.Content = string.Empty;
+        if (_model.Content == null)
+            _model.Content = string.Empty;
+        
         _model.OnUpdateAllEvent += Refresh;
 
         return base.OnInitializedAsync();

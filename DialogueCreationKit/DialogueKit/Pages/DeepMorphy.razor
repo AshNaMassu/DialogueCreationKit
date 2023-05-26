@@ -158,11 +158,11 @@
                         }
                         
 
-                        var indexOf = message.Message.Message.IndexOf(word);
+                        var indexOf = message.Message.Message.IndexOf(word, StringComparison.OrdinalIgnoreCase);
 
                         if (indexOf == 0 || message.Message.Message[indexOf - 1] != '#')
                         {
-                            message.Message.Message = message.Message.Message.Replace(word, $"#{word}");
+                            message.Message.Message = message.Message.Message.Replace(word, $"#{word}", StringComparison.OrdinalIgnoreCase);
                         }    
                     }
 
