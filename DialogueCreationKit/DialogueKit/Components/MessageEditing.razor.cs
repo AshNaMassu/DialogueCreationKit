@@ -1,17 +1,16 @@
-﻿using DialogueCreationKit.DialogueKit.Contracts;
-using DialogueCreationKit.DialogueKit.Models.View;
+﻿using DialogueCreationKit.DialogueKit.Domain.ViewModel;
 using Microsoft.AspNetCore.Components;
 
 namespace DialogueCreationKit.DialogueKit.Components
 {
-	public partial class MessageEditing
-	{
-		[Parameter]
-		public DialogueMessageCheckView Message { get; set; }
+    public partial class MessageEditing
+    {
+        [Parameter]
+        public DialogueMessageCheckView Message { get; set; }
 
-		protected override async Task OnInitializedAsync()
-		{
-			await base.OnInitializedAsync();
-		}
-	}
+        protected override async Task OnInitializedAsync()
+        {
+            await base.OnInitializedAsync();
+        }
+    }
 }

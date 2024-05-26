@@ -1,7 +1,5 @@
 using DialogueCreationKit.DialogueKit.Contracts;
-using DialogueCreationKit.DialogueKit.Models.View;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using DialogueCreationKit.DialogueKit.Domain.ViewModel;
 
 var builder = WebApplication.CreateBuilder(args);
 

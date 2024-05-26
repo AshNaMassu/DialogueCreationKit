@@ -1,4 +1,6 @@
-﻿namespace DialogueCreationKit.DialogueKit.Models
+﻿using DialogueCreationKit.DialogueKit.Domain.ViewModel;
+
+namespace DialogueCreationKit.DialogueKit.Domain
 {
     [Serializable]
     public class DialogueTree
@@ -11,7 +13,7 @@
 
         public DialogueTree()
         {
-           // Id = Guid.NewGuid();
+            // Id = Guid.NewGuid();
             Npc = new Npc();
             Content = new List<Guid>();
         }

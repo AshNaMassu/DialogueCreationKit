@@ -1,8 +1,6 @@
-﻿
+﻿using DialogueCreationKit.DialogueKit.Helpers;
 
-using DialogueCreationKit.DialogueKit.Helpers;
-
-namespace DialogueCreationKit.DialogueKit.Models.View
+namespace DialogueCreationKit.DialogueKit.Domain.ViewModel
 {
     public class DialogueMessageView
     {

@@ -5,9 +5,9 @@ using DeepMorphy.Model;
 using Microsoft.AspNetCore.Routing.Constraints;
 using AntDesign;
 using System.Threading.Tasks;
-using DialogueCreationKit.DialogueKit.Models;
 using System.Collections.Generic;
-using DialogueCreationKit.DialogueKit.Models.Responses;
+using DialogueCreationKit.DialogueKit.Domain;
+using DialogueCreationKit.DialogueKit.Domain.Responses;
 
 namespace DialogueCreationKit.DialogueKit.Managers;
 

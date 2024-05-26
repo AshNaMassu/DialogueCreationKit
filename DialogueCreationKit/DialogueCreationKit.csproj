@@ -13,9 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DialogueKit\Models\Responses\" />
+    <Folder Include="DialogueKit\Domain\Responses\" />
     <Folder Include="DialogueKit\Helpers\" />
-    <Folder Include="DialogueKit\Validators\" />
   </ItemGroup>
 
 </Project>

@@ -1,18 +1,13 @@
 ﻿@page "/"
 @page "/create"
-@using DialogueCreationKit.DialogueKit.Components
-@using DialogueCreationKit.DialogueKit.Contracts
+@using DialogueCreationKit.DialogueKit.Components;
+@using DialogueCreationKit.DialogueKit.Contracts;
+@using DialogueCreationKit.DialogueKit.Domain.ViewModel;
 @using DialogueCreationKit.DialogueKit.Enums;
 @using DialogueCreationKit.DialogueKit.Managers;
-@using DialogueCreationKit.DialogueKit.Models
 @using System.Text.Json;
 @using System.ComponentModel.DataAnnotations;
 @using System.Globalization;
-@using DialogueCreationKit.DialogueKit.Models.View;
-
-@inject IJSRuntime JSRuntime
-@inject IDialogueCreationModel _model
-@implements IDisposable
 
 <GridRow Class="grid-row main">
     <!--main-->
@@ -34,7 +29,7 @@
             <GridCol Flex=@("16px") />
 
             <GridCol Span="8">
-                <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => DialogueCreationManager.CreateMessageList(_model))">Обновить</Button>
+                <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => DialogueCreationManager.CreateMessageList(_model))">Построить диалог</Button>
             </GridCol>
 
         </GridRow>
@@ -143,7 +138,7 @@
         {
             <GridRow Class="grid-row ">
                 <GridCol Span="24">
-                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(JSRuntime, _model))">Скачать диалог</Button>
+                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(_jsRuntime, _model))">Скачать диалог</Button>
                 </GridCol>
             </GridRow>
             <GridRow Class="grid-row ">
@@ -157,7 +152,7 @@
             </GridRow>
             <GridRow Class="grid-row ">
                 <GridCol Span="24">
-                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(JSRuntime, _model))">Скачать диалог</Button>
+                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => DialogueCreationManager.Serialize(_jsRuntime, _model))">Скачать диалог</Button>
                 </GridCol>
             </GridRow>
         }

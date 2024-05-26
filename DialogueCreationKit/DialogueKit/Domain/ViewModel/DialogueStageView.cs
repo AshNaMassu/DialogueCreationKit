@@ -1,6 +1,6 @@
 ﻿using DialogueCreationKit.DialogueKit.Enums;
 
-namespace DialogueCreationKit.DialogueKit.Models.View
+namespace DialogueCreationKit.DialogueKit.Domain.ViewModel
 {
     public class DialogueStageView
     {

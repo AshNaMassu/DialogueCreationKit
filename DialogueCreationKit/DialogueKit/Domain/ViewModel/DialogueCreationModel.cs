@@ -1,7 +1,7 @@
 ﻿using DialogueCreationKit.DialogueKit.Contracts;
 using DialogueCreationKit.DialogueKit.Enums;
 
-namespace DialogueCreationKit.DialogueKit.Models.View
+namespace DialogueCreationKit.DialogueKit.Domain.ViewModel
 {
     public class DialogueCreationModel : IDialogueCreationModel
     {
@@ -12,8 +12,8 @@ namespace DialogueCreationKit.DialogueKit.Models.View
         public string Content { get; set; }
         public DialogueCreateMode Mode { get; set; }
 
-        public bool IsEmptyListMessages => (ListMessages == null || ListMessages.Count == 0);
-        public bool IsEmptyListMessagesMorphy => (ListMessagesMorphy == null || ListMessagesMorphy.Count == 0);
+        public bool IsEmptyListMessages => ListMessages == null || ListMessages.Count == 0;
+        public bool IsEmptyListMessagesMorphy => ListMessagesMorphy == null || ListMessagesMorphy.Count == 0;
 
         public List<DialogueMessageView> ListMessages { get; set; }
         public List<DialogueMessageCheckView> ListMessagesMorphy { get; set; }
@@ -30,7 +30,7 @@ namespace DialogueCreationKit.DialogueKit.Models.View
         public DialogueCreationModel()
         {
             //Actor = new Npc();
-            ActorName = new List<string>() { "Довакин", "Слышащий", "Соловей", "Архимаг", "Клинок", "Пенитус Окулатус", "ГЕЙмерская Чепушила Ушастая" }[new Random().Next(0, 7)];
+            ActorName = new List<string>() { "Довакин", "Слышащий", "Соловей", "Архимаг", "Клинок", "Пенитус Окулатус" }[new Random().Next(0, 6)];
             Companion = new Npc();
             Content = string.Empty;
             Mode = DialogueCreateMode.Dialogue;

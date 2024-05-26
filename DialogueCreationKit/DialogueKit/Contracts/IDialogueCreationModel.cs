@@ -1,6 +1,5 @@
-﻿using DialogueCreationKit.DialogueKit.Enums;
-using DialogueCreationKit.DialogueKit.Models;
-using DialogueCreationKit.DialogueKit.Models.View;
+﻿using DialogueCreationKit.DialogueKit.Domain.ViewModel;
+using DialogueCreationKit.DialogueKit.Enums;
 
 namespace DialogueCreationKit.DialogueKit.Contracts
 {
