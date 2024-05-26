@@ -1,5 +1,4 @@
 ﻿using DialogueCreationKit.DialogueKit.Contracts;
-using DialogueCreationKit.DialogueKit.Models.View;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace DialogueCreationKit.DialogueKit.Managers
@@ -8,8 +7,10 @@ namespace DialogueCreationKit.DialogueKit.Managers
     {
         private static int? _dragging;
 
-        public static void OnDrop(IDialogueCreationModel model, DragEventArgs e, int? s)
+        public static void OnDrop(IDialogueCreationModel model, DragEventArgs e, int? s, bool isDraggable)
         {
+            if (!isDraggable) return;
+
             if (s.HasValue && _dragging.HasValue)
             {
                 var tempDrag = model.ListMessages[_dragging.Value];
@@ -28,8 +29,10 @@ namespace DialogueCreationKit.DialogueKit.Managers
             }
         }
 
-        public static void OnDragStart(DragEventArgs e, int? s)
+        public static void OnDragStart(DragEventArgs e, int? s, bool isDraggable)
         {
+            if (!isDraggable) return;
+
             e.DataTransfer.DropEffect = "move";
             e.DataTransfer.EffectAllowed = "move";
             _dragging = s;

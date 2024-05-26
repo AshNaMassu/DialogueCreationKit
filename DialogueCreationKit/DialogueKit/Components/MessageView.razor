@@ -1,12 +1,10 @@
-﻿@using DialogueCreationKit.DialogueKit.Enums;
-@using DialogueCreationKit.DialogueKit.Managers;
-@using DialogueCreationKit.DialogueKit.Models;
-@using DialogueCreationKit.DialogueKit.Models.View;
+﻿@using DialogueCreationKit.DialogueKit.Enums
+@using DialogueCreationKit.DialogueKit.Managers
 
 @if (_model.Mode == DialogueCreateMode.Dialogue)
 {
     <li class="message" id="@Message.Id" style="background: @(GetColor())" @onclick=OnMessageClick>
-        <div draggable="true" @ondrop="e=>DragAndDropManager.OnDrop(_model, e, Message.Id)" @ondragstart="e=>DragAndDropManager.OnDragStart(e, Message.Id)" ondragover="event.preventDefault()">
+        <div draggable="@IsDraggable.ToString()" @ondrop="e=>DragAndDropManager.OnDrop(_model, e, Message.Id, IsDraggable)" @ondragstart="e=>DragAndDropManager.OnDragStart(e, Message.Id, IsDraggable)" ondragover="event.preventDefault()">
             <div class="header">
                 <Avatar Style=@(_isActor ? colorAvatar0 : colorAvatar1) Class="avatar">
                     @(
@@ -34,7 +32,7 @@
 else
 {
     <li class="message" id="@Message.Id" style="background: #ffffff">
-        <div draggable="true" @ondrop="e=>DragAndDropManager.OnDrop(_model, e, Message.Id)" @ondragstart="e=>DragAndDropManager.OnDragStart(e, Message.Id)" ondragover="event.preventDefault()">
+        <div draggable="@IsDraggable.ToString()" @ondrop="e=>DragAndDropManager.OnDrop(_model, e, Message.Id, IsDraggable)" @ondragstart="e=>DragAndDropManager.OnDragStart(e, Message.Id, IsDraggable)" ondragover="event.preventDefault()">
             <div>
                 <TextArea AutoSize MaxRows="2" Value="@Message.Message" DebounceMilliseconds="10" OnChange="OnMessageChanged" />
             </div>

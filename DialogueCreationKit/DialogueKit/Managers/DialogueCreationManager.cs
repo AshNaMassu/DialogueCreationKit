@@ -1,14 +1,10 @@
 ﻿using DialogueCreationKit.DialogueKit.Contracts;
+using DialogueCreationKit.DialogueKit.Domain;
+using DialogueCreationKit.DialogueKit.Domain.ViewModel;
 using DialogueCreationKit.DialogueKit.Enums;
-using DialogueCreationKit.DialogueKit.Models;
-using DialogueCreationKit.DialogueKit.Models.View;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Immutable;
 using System.Text;
-using System.Xml.Linq;
 
 namespace DialogueCreationKit.DialogueKit.Managers
 {
@@ -17,9 +13,9 @@ namespace DialogueCreationKit.DialogueKit.Managers
         public static void CreateMorphyFromMessages(IDialogueCreationModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
-            if (model.IsEmptyListMessages) throw new ArgumentException(nameof(model.ListMessages));
+            if (model.IsEmptyListMessages)  throw new ArgumentException(nameof(model.ListMessages));
 
-            model.ListMessagesMorphy = model.ListMessages.Select( x => new DialogueMessageCheckView(x)).ToList();
+            model.ListMessagesMorphy = model.ListMessages.Select(x => new DialogueMessageCheckView(x)).ToList();
         }
 
         public static void CreateMessagesFromMorphy(IDialogueCreationModel model)
@@ -45,7 +41,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
             var startBoundIndex = model.ListMessages.Count;
 
-            for ( int indexMessage = 0; indexMessage < messages.Length; indexMessage ++ )
+            for (int indexMessage = 0; indexMessage < messages.Length; indexMessage++)
             {
                 int i = 0;
                 for (; i < messages[indexMessage].Length; i++)
@@ -75,7 +71,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             if (model.ListStage == null)
             {
                 model.ListStage = new List<DialogueStageView>();
-                model.ListStage = model.ListMessages.Select( x => new DialogueStageView()).ToList();
+                model.ListStage = model.ListMessages.Select(x => new DialogueStageView()).ToList();
             }
             else
             {
@@ -130,7 +126,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             if (model.IsEmptyListMessages) throw new ArgumentException(nameof(model.ListMessages));
             //if (model.Actor == null) throw new ArgumentException(nameof(model.Actor));
             if (model.Companion == null) throw new ArgumentException(nameof(model.Companion));
-            
+
             int t = 0;
             foreach (var stage in model.ListStage)
             {
@@ -154,7 +150,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
         public static async void Serialize(IJSRuntime js, IDialogueCreationModel model)
         {
-            if (model.IsEmptyListMessages) return; 
+            if (model.IsEmptyListMessages) return;
 
             if (model.Mode == DialogueCreateMode.RandomMessages)
             {
@@ -177,12 +173,12 @@ namespace DialogueCreationKit.DialogueKit.Managers
                 var stages = model.ListStage;
                 List<DialogueNode> nodes = new List<DialogueNode>();
 
-                messages.ForEach(x => nodes.Add( new DialogueNode() { Message = x.Message, Stage = stages[x.Id].Stage }));
+                messages.ForEach(x => nodes.Add(new DialogueNode() { Message = x.Message, Stage = stages[x.Id].Stage }));
 
                 nodes[0].Child = nodes[1].Id;
 
                 for (int i = 2; i < nodes.Count; i++)
-                { 
+                {
                     switch (nodes[i].Stage)
                     {
                         case DialogueStage.Content:
@@ -206,7 +202,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
                 tree.Begin = nodes.FirstOrDefault(x => x.Stage == DialogueStage.Begin).Id;
 
                 //tree.Content = nodes.FirstOrDefault(x => x.Stage == DialogueStage.Content && x.Child.);
-                for (int i = 2; i < stages.Count - 3 + stages.Count % 2; i+= 2)
+                for (int i = 2; i < stages.Count - 3 + stages.Count % 2; i += 2)
                 {
                     if (stages[i].IsNewTheme)
                         tree.Content.Add(nodes[i].Id);
@@ -234,7 +230,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             DialogueTree tree = new DialogueTree();
             tree.Npc = model.Companion;
 
-            var messages = model.ListMessagesMorphy.Select( x => x.Message).ToList();
+            var messages = model.ListMessagesMorphy.Select(x => x.Message).ToList();
             var stages = model.ListStage;
 
             List<DialogueNode> nodes = new List<DialogueNode>();

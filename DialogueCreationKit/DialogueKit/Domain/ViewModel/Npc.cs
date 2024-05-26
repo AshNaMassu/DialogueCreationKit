@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace DialogueCreationKit.DialogueKit.Models
+namespace DialogueCreationKit.DialogueKit.Domain.ViewModel
 {
     [Serializable]
     public class Npc
@@ -9,7 +9,7 @@ namespace DialogueCreationKit.DialogueKit.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
 
-        public Npc() 
+        public Npc()
         {
             Id = Guid.NewGuid();
             Name = "ABCDEF"[new Random().Next(0, 6)].ToString();

@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DialogueCreationKit.DialogueKit.Models
+namespace DialogueCreationKit.DialogueKit.Domain
 {
     public class DialogueMessageCheck
     {
         public Guid Id { get; set; }
-        public string Value { get; set; }   
+        public string Value { get; set; }
         public string Infinitive { get; set; }
 
         [NonSerialized]
         public List<Variant> VariantsValue;
-        
+
         public List<string> Variants { get; set; }
 
-        public DialogueMessageCheck() 
+        public DialogueMessageCheck()
         {
             Id = Guid.NewGuid();
             Value = string.Empty;
@@ -26,7 +26,7 @@ namespace DialogueCreationKit.DialogueKit.Models
     {
         public string Value { get; set; }
 
-        public Variant(string v) 
+        public Variant(string v)
         {
             Value = v;
         }

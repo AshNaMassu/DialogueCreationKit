@@ -1,6 +1,6 @@
 ﻿using DialogueCreationKit.DialogueKit.Enums;
 
-namespace DialogueCreationKit.DialogueKit.Models
+namespace DialogueCreationKit.DialogueKit.Domain
 {
     [Serializable]
     public class DialogueNode

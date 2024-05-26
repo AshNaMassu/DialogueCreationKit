@@ -1,11 +1,11 @@
 ﻿@page "/deepmorphy"
-@using DialogueCreationKit.DialogueKit.Components
-@using DialogueCreationKit.DialogueKit.Contracts
+@using DialogueCreationKit.DialogueKit.Components;
+@using DialogueCreationKit.DialogueKit.Contracts;
+@using DialogueCreationKit.DialogueKit.Domain.ViewModel
 @using DialogueCreationKit.DialogueKit.Enums;
 @using DialogueCreationKit.DialogueKit.Helpers;
-@using DialogueCreationKit.DialogueKit.Models.View;
 @using DialogueCreationKit.DialogueKit.Managers;
-@using DialogueCreationKit.DialogueKit.Models;
+@using DialogueCreationKit.DialogueKit.Domain;
 
 @inject IDialogueCreationModel _model
 @inject IJSRuntime _js 
@@ -13,7 +13,7 @@
 
 <GridRow Class="grid-row main">
     <!--main-->
-
+    
     <GridCol Span="12" Class="grid-col-main">
         
         <GridRow Class="grid-row ">
@@ -28,13 +28,18 @@
             </GridCol>
         </GridRow>
 
+        @if (_model.IsEmptyListMessages)
+        {
+            <span>Для продолжения необходимо сгенерировать диалог на странице '/create'</span>
+        }
+
         @if (_model.ListMessagesMorphy != null && _model.ListMessagesMorphy.Count > 0)
         {
             <GridRow Class="grid-row ">
                 <GridCol Flex=@("auto")>
                     <AntList DataSource="@_model.ListMessagesMorphy" ItemLayout="@ListItemLayout.Vertical">
                         <ChildContent Context="item" >
-                            <MessageView Message=@item.Message OnMessageClick="()=> {SelectedMessage = item;}" IsCheckedMessageMode />
+                            <MessageView IsDraggable=false Message=@item.Message OnMessageClick="()=> {SelectedMessage = item;}" IsCheckedMessageMode />
                         </ChildContent>
                     </AntList>
                 </GridCol>
@@ -65,10 +70,13 @@
 
     protected override Task OnInitializedAsync()
     {
-        if (_model.IsEmptyListMessagesMorphy)
-            DialogueCreationManager.CreateMorphyFromMessages(_model);
+        if (!_model.IsEmptyListMessages)
+        {
+            if (_model.IsEmptyListMessagesMorphy)
+                DialogueCreationManager.CreateMorphyFromMessages(_model);
 
-        _model.OnUpdateAllEvent += Refresh;
+            _model.OnUpdateAllEvent += Refresh;
+        }
 
         return base.OnInitializedAsync();
     }
