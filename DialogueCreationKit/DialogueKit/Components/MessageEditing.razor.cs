@@ -7,7 +7,7 @@ namespace DialogueCreationKit.DialogueKit.Components
 	public partial class MessageEditing
 	{
 		[Parameter]
-		public IDialogueMessageCheckView Message { get; set; }
+		public DialogueMessageCheckView Message { get; set; }
 
 		protected override async Task OnInitializedAsync()
 		{
