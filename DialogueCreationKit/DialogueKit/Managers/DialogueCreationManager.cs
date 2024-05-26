@@ -1,4 +1,5 @@
-﻿    using DialogueCreationKit.DialogueKit.Enums;
+﻿using DialogueCreationKit.DialogueKit.Contracts;
+using DialogueCreationKit.DialogueKit.Enums;
 using DialogueCreationKit.DialogueKit.Models;
 using DialogueCreationKit.DialogueKit.Models.View;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
 {
     public static class DialogueCreationManager
     {
-        public static void CreateMorphyFromMessages(DialogueCreationModel model)
+        public static void CreateMorphyFromMessages(IDialogueCreationModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (model.IsEmptyListMessages) throw new ArgumentException(nameof(model.ListMessages));
@@ -21,7 +22,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             model.ListMessagesMorphy = model.ListMessages.Select( x => new DialogueMessageCheckView(x)).ToList();
         }
 
-        public static void CreateMessagesFromMorphy(DialogueCreationModel model)
+        public static void CreateMessagesFromMorphy(IDialogueCreationModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (model.IsEmptyListMessagesMorphy) throw new ArgumentException(nameof(model.ListMessagesMorphy));
@@ -29,7 +30,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             model.ListMessages = model.ListMessagesMorphy.Select(x => x.Message.Copy()).ToList();
         }
 
-        public static void CreateMessageList(DialogueCreationModel model)
+        public static void CreateMessageList(IDialogueCreationModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (string.IsNullOrWhiteSpace(model.Content)) return;// throw new ArgumentException(nameof(model));
@@ -65,7 +66,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             CreateOrUpdateTheme(model);
         }
 
-        public static void CreateOrUpdateTheme(DialogueCreationModel model)
+        public static void CreateOrUpdateTheme(IDialogueCreationModel model)
         {
             if (model.IsEmptyListMessages) throw new ArgumentException(nameof(model.ListMessages));
 
@@ -121,7 +122,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             UpdateTheme(model, needUpdate);
         }
 
-        public static void UpdateTheme(DialogueCreationModel model, bool needUpdate)
+        public static void UpdateTheme(IDialogueCreationModel model, bool needUpdate)
         {
             if (!needUpdate) return;
 
@@ -142,7 +143,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
             model.OnUpdateAll();
         }
 
-        public static void CreateDialogueTreeNode(DialogueCreationModel model)
+        public static void CreateDialogueTreeNode(IDialogueCreationModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
             if (model.IsEmptyListMessages) throw new ArgumentException(nameof(model.ListMessages));
@@ -151,7 +152,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
 
         }
 
-        public static async void Serialize(IJSRuntime js, DialogueCreationModel model)
+        public static async void Serialize(IJSRuntime js, IDialogueCreationModel model)
         {
             if (model.IsEmptyListMessages) return; 
 
@@ -224,7 +225,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
         }
 
 
-        public static async void SerializeMorphy(IJSRuntime js, DialogueCreationModel model)
+        public static async void SerializeMorphy(IJSRuntime js, IDialogueCreationModel model)
         {
             if (model.IsEmptyListMessagesMorphy) return;
 

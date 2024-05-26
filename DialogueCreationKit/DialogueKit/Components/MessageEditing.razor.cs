@@ -1,4 +1,5 @@
-﻿using DialogueCreationKit.DialogueKit.Models.View;
+﻿using DialogueCreationKit.DialogueKit.Contracts;
+using DialogueCreationKit.DialogueKit.Models.View;
 using Microsoft.AspNetCore.Components;
 
 namespace DialogueCreationKit.DialogueKit.Components
@@ -6,7 +7,7 @@ namespace DialogueCreationKit.DialogueKit.Components
 	public partial class MessageEditing
 	{
 		[Parameter]
-		public DialogueMessageCheckView Message { get; set; }
+		public IDialogueMessageCheckView Message { get; set; }
 
 		protected override async Task OnInitializedAsync()
 		{

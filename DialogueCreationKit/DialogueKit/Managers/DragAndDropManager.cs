@@ -1,4 +1,5 @@
-﻿using DialogueCreationKit.DialogueKit.Models.View;
+﻿using DialogueCreationKit.DialogueKit.Contracts;
+using DialogueCreationKit.DialogueKit.Models.View;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace DialogueCreationKit.DialogueKit.Managers
@@ -7,7 +8,7 @@ namespace DialogueCreationKit.DialogueKit.Managers
     {
         private static int? _dragging;
 
-        public static void OnDrop(DialogueCreationModel model, DragEventArgs e, int? s)
+        public static void OnDrop(IDialogueCreationModel model, DragEventArgs e, int? s)
         {
             if (s.HasValue && _dragging.HasValue)
             {

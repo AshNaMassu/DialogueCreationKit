@@ -1,4 +1,5 @@
 ﻿using AntDesign;
+using DialogueCreationKit.DialogueKit.Contracts;
 using DialogueCreationKit.DialogueKit.Enums;
 using DialogueCreationKit.DialogueKit.Managers;
 using DialogueCreationKit.DialogueKit.Models.View;
@@ -10,7 +11,7 @@ namespace DialogueCreationKit.DialogueKit.Components
 	public partial class MessageView : IDisposable
 	{
 		[Inject]
-		DialogueCreationModel _model { get; set; }
+		IDialogueCreationModel _model { get; set; }
 
 		[Parameter]
 		public EventCallback OnMessageClick { get; set; }

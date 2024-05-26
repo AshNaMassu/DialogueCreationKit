@@ -1,8 +1,9 @@
-﻿using DialogueCreationKit.DialogueKit.Enums;
+﻿using DialogueCreationKit.DialogueKit.Contracts;
+using DialogueCreationKit.DialogueKit.Enums;
 
 namespace DialogueCreationKit.DialogueKit.Models.View
 {
-    public class DialogueCreationModel
+    public class DialogueCreationModel : IDialogueCreationModel
     {
         //public Npc Actor { get; set; }
         public string ActorName { get; set; }

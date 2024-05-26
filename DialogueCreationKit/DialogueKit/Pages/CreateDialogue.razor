@@ -1,6 +1,7 @@
 ﻿@page "/"
 @page "/create"
 @using DialogueCreationKit.DialogueKit.Components
+@using DialogueCreationKit.DialogueKit.Contracts
 @using DialogueCreationKit.DialogueKit.Enums;
 @using DialogueCreationKit.DialogueKit.Managers;
 @using DialogueCreationKit.DialogueKit.Models
@@ -30,7 +31,7 @@
 </style>
 
 @inject IJSRuntime JSRuntime
-@inject DialogueCreationModel _model
+@inject IDialogueCreationModel _model
 @implements IDisposable
 
 <GridRow Class="grid-row main">

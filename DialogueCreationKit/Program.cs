@@ -1,3 +1,4 @@
+using DialogueCreationKit.DialogueKit.Contracts;
 using DialogueCreationKit.DialogueKit.Models.View;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddAntDesign();
-builder.Services.AddScoped<DialogueCreationModel>();
+builder.Services.AddScoped<IDialogueCreationModel, DialogueCreationModel>();
 
 var app = builder.Build();
 
