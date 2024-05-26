@@ -1,5 +1,7 @@
-using DialogueCreationKit.DialogueKit.Contracts;
-using DialogueCreationKit.DialogueKit.Domain.ViewModel;
+using DialogueCreationKit.DialogueKit.Domain.Contracts;
+using DialogueCreationKit.DialogueKit.Domain.Contracts.Services;
+using DialogueCreationKit.DialogueKit.Domain.Model.ViewModel;
+using DialogueCreationKit.DialogueKit.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddAntDesign();
+
 builder.Services.AddScoped<IDialogueCreationModel, DialogueCreationModel>();
+// init services
+builder.Services.AddScoped<IDialogueCreationService, DialogueCreationService>();
+builder.Services.AddScoped<IDragAndDropService, DragAndDropService>();
+builder.Services.AddScoped<IMorphemesService, MorphemesService>();
+//init controller
+builder.Services.AddScoped<MorphemesController>();
+builder.Services.AddScoped<DragAndDropController>();
+builder.Services.AddScoped<DialogueCreationController>();
 
 var app = builder.Build();
 

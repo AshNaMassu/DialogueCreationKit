@@ -1,0 +1,56 @@
+﻿@using DialogueCreationKit.DialogueKit.Domain
+@using DialogueCreationKit.DialogueKit.Domain.Model
+
+@if (Message != null && Message.Message.Id % 2 == 0)
+{
+    <GridRow Class="grid-row">
+        <GridCol Flex=@("auto")>
+            <MessageView Message="@Message.Message" IsCheckedMessageMode />
+        </GridCol>
+    </GridRow>
+
+    @if (Message.Checks != null)
+    {
+        foreach (var check in Message.Checks)
+        {
+            <GridRow Class="grid-row ">
+                <GridCol Flex=@("auto")>
+                    <h4>Формы глагола: @check.Value</h4>
+                </GridCol>
+            </GridRow>
+
+            <GridRow Class="grid-row ">
+                <GridCol Span="4">
+                    Инфинитив: 
+                </GridCol>
+                <GridCol Flex=@("auto")>
+                    <Input @bind-Value="@check.Infinitive" />
+                </GridCol>
+            </GridRow>
+
+            @if (check.VariantsValue != null)
+            {
+                foreach (var variant in check.VariantsValue)
+                {
+                    <GridRow Class="grid-row ">
+                        <GridCol Span="4">
+                            Вариант: 
+                        </GridCol>
+                        <GridCol Flex=@("auto")>
+                            <Input @bind-Value="@variant.Value" />
+                        </GridCol>
+                    </GridRow>
+                }
+
+                <GridRow Class="grid-row ">
+                    <GridCol Flex=@("auto")>
+                        <Button Block Icon="plus" OnClick="() => check.VariantsValue.Add(new Variant(null))">Добавить свой вариант</Button>
+                    </GridCol>
+                        <GridCol Flex=@("auto")>
+                        <Button Block Icon="delete" Disabled=@(check.VariantsValue.Count < 2) OnClick="() => check.VariantsValue.RemoveAt(check.VariantsValue.Count - 2)">Удалить свой вариант</Button>
+                        </GridCol>
+                </GridRow>
+            }
+        }
+    }
+}

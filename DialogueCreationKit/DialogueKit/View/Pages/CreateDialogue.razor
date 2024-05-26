@@ -1,0 +1,157 @@
+﻿@page "/"
+@page "/create"
+@using DialogueCreationKit.DialogueKit.View.Components;
+@using DialogueCreationKit.DialogueKit.Domain.Model;
+@using DialogueCreationKit.DialogueKit.Domain.Enums;
+
+
+<GridRow Class="grid-row main">
+    <!--main-->
+    <GridCol Span="12" Class="grid-col-main" >
+        <!--col 0-->
+        <GridRow Class="grid-row ">
+            <GridCol Span="12">
+                <Select @bind-Value="@_model.Mode"
+                        DefaultValue="@DialogueCreateMode.Dialogue"
+                        TItemValue="DialogueCreateMode"
+                        TItem="string" >
+                    <SelectOptions>
+                        <SelectOption TItemValue="DialogueCreateMode" TItem="string" Value="@DialogueCreateMode.Dialogue" Label="Диалог" />
+                        <SelectOption TItemValue="DialogueCreateMode" TItem="string" Value="@DialogueCreateMode.RandomMessages" Label="Рандомные сообщения" />
+                    </SelectOptions>
+                </Select>
+            </GridCol>
+
+            <GridCol Flex=@("16px") />
+
+            <GridCol Span="8">
+                <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => _dialogueCreationController.CreateMessageList(_model))">Построить диалог</Button>
+            </GridCol>
+
+        </GridRow>
+
+       
+        <GridRow Class="grid-row ">
+            <GridCol Flex=@("auto")>
+                @if (_model != null)
+                {
+                    <GridRow Class="grid-row ">
+                        <GridCol Span=4>
+                            @(_model.Mode == DialogueCreateMode.Dialogue ? "Главный герой" : "Имя файла")
+                        </GridCol>
+                    </GridRow>
+
+                    <GridRow Class="grid-row ">
+                        <GridCol Span="12">
+                            <Input @bind-Value="@_model.ActorName" Placeholder="Имя" />
+                            </GridCol>
+                        </GridRow>
+                }
+
+                @if (_model.Mode == DialogueCreateMode.Dialogue && _model.Companion != null)
+                {
+                    <GridRow Class="grid-row ">
+                        <GridCol Span=4>
+                             Собеседник
+                       </GridCol>
+                    </GridRow>
+
+                    <GridRow Class="grid-row ">
+                        <GridCol Span="12">
+                            <Select @bind-Value="@_scene"
+                                DefaultValue="@SceneEnum.Scene0"
+                                TItemValue="SceneEnum"
+                                TItem="string">
+                                <SelectOptions>
+                                    <SelectOption TItemValue="SceneEnum" TItem="string" Value="@SceneEnum.Scene0" Label="Офис" />
+                                    <SelectOption TItemValue="SceneEnum" TItem="string" Value="@SceneEnum.Scene1" Label="Семья" />
+                                </SelectOptions>
+                            </Select>
+                        </GridCol>
+
+                        <GridCol Flex=@("16px") />
+
+                        <GridCol Span="12">
+                            <Select @bind-Value="@_model.Companion"
+                                DefaultValue="@(_scene == SceneEnum.Scene0 ? Scene0[0] : Scene1[0])"
+                                TItemValue="Npc"
+                                TItem="Npc"
+                                DataSource="@(_scene == SceneEnum.Scene0 ? Scene0 : Scene1)">
+                               
+                            </Select>
+                        </GridCol>
+                    </GridRow>
+
+                    
+                    <GridRow Class="grid-row ">
+                       <GridCol Span="12">
+                            <Input @bind-Value="@_model.Companion.Name" Placeholder="Имя" />
+                       </GridCol>
+                    </GridRow>
+
+                    <GridRow Class="grid-row ">
+                       <GridCol Span="12">
+                          <Input @bind-Value="@_model.Companion.Id" Placeholder="@Guid.Empty.ToString()" />
+                       </GridCol>
+                       
+                       
+                       <GridCol Flex=@("16px") />
+
+                       <GridCol Span="8">
+                            <Button OnClick="@(() => _model.Companion.Id = Guid.NewGuid())">Сгенерировать</Button>
+                       </GridCol>
+                       
+                    </GridRow>
+                }
+                </GridCol>
+            </GridRow>
+
+        <GridRow Class="grid-row ">
+            <GridCol Span="24">
+                <GridRow Class="grid-row ">
+                    <GridCol Span=8>
+                        Содержание диалога
+                    </GridCol> 
+                </GridRow>
+            
+                <GridRow Class="grid-row ">
+                    <GridCol Flex=@("auto")>
+                        <TextArea Placeholder=@($"- Реплика 1\n- Реплика 2\n- Реплика 3\n- Реплика 4\n") AutoSize MaxRows="15" Value="@_model.Content" DebounceMilliseconds="100" OnChange="OnContentChanged" />
+                    </GridCol>
+                </GridRow>
+                <GridRow Class="grid-row ">
+                    <GridCol Span="24">
+                        <Button Block Icon="@IconType.Outline.Sync" OnClick="@(() => _dialogueCreationController.CreateMessageList(_model))">Обновить</Button>
+                    </GridCol>
+                </GridRow>
+            </GridCol>
+        </GridRow>
+    <!--col 0-->
+    </GridCol>
+
+    <GridCol Span="12" Class="grid-col-main">
+        @if (_model.ListMessages != null && _model.ListMessages.Count > 0)
+        {
+            <GridRow Class="grid-row ">
+                <GridCol Span="24">
+                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => _dialogueCreationController.Serialize(_jsRuntime, _model))">Скачать диалог</Button>
+                </GridCol>
+            </GridRow>
+            <GridRow Class="grid-row ">
+                <GridCol Flex=@("auto")>
+                    <AntList DataSource="@_model.ListMessages" ItemLayout="@ListItemLayout.Vertical">
+                        <ChildContent Context="item">
+                            <MessageView Message=@item />
+                        </ChildContent>
+                    </AntList>
+                </GridCol>
+            </GridRow>
+            <GridRow Class="grid-row ">
+                <GridCol Span="24">
+                    <Button Block Icon="@IconType.Outline.Download" OnClick="@(() => _dialogueCreationController.Serialize(_jsRuntime, _model))">Скачать диалог</Button>
+                </GridCol>
+            </GridRow>
+        }
+    </GridCol>
+<!--main-->
+</GridRow>
